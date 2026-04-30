@@ -51,6 +51,16 @@ function hashIp(ip: string): string | null {
   return crypto.createHmac("sha256", secret).update(ip).digest("hex");
 }
 
+function stringifyError(err: unknown): string {
+  if (typeof err === "string") return err;
+  if (err instanceof Error) return err.message;
+  try {
+    return JSON.stringify(err, Object.getOwnPropertyNames(err), 2);
+  } catch {
+    return String(err);
+  }
+}
+
 // --- handler --------------------------------------------------------------
 
 export async function POST(req: Request) {
@@ -117,6 +127,9 @@ export async function POST(req: Request) {
 
   // 3. Send welcome email — only on first signup. Failures here don't block
   //    the user's success response: they're on the list either way.
+  let welcomeEmailSent = false;
+  let welcomeEmailError: string | null = null;
+
   if (isNew) {
     try {
       const resend = getResend();
@@ -128,13 +141,23 @@ export async function POST(req: Request) {
         html,
         text,
       });
+
       if (sendError) {
-        console.error("[waitlist] resend send failed:", sendError);
+        welcomeEmailError = stringifyError(sendError);
+        console.error("[waitlist] resend send failed:", welcomeEmailError);
+      } else {
+        welcomeEmailSent = true;
       }
     } catch (err) {
-      console.error("[waitlist] resend client error:", err);
+      welcomeEmailError = stringifyError(err);
+      console.error("[waitlist] resend client error:", welcomeEmailError);
     }
   }
 
-  return NextResponse.json({ ok: true, alreadyOnList: !isNew });
+  return NextResponse.json({
+    ok: true,
+    alreadyOnList: !isNew,
+    welcomeEmailSent,
+    welcomeEmailError,
+  });
 }

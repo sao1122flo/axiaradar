@@ -12,6 +12,7 @@ export default function AxiaLanding() {
   const [page, setPage] = useState("home"); // home | about | pricing
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submittedMessage, setSubmittedMessage] = useState("");
   const [skill, setSkill] = useState("UX Designer");
   const [city, setCity] = useState("Austin, TX");
   const [tier, setTier] = useState("Mid");
@@ -79,23 +80,26 @@ export default function AxiaLanding() {
       if (res.ok) {
         const data = await res.json();
         setSubmitted(true);
+        setSubmittedMessage(
+          data.alreadyOnList
+            ? "You're already on the waitlist. No new email was sent."
+            : "Check your inbox. You should receive a welcome email soon.",
+        );
         setEmail("");
-        setTimeout(() => setSubmitted(false), 6000);
+        setTimeout(() => {
+          setSubmitted(false);
+          setSubmittedMessage("");
+        }, 6000);
       } else if (res.status === 404) {
-        // Endpoint doesn't exist (preview/demo mode). Fake success.
-        setSubmitted(true);
-        setEmail("");
-        setTimeout(() => setSubmitted(false), 6000);
+        setError(
+          "Waitlist API not found. Make sure your local dev server is running and /api/waitlist exists.",
+        );
       } else {
         const data = await res.json().catch(() => ({}));
         setError(data.error || "Something went wrong. Try again.");
       }
     } catch (err) {
-      // Network error or fetch failed entirely (e.g. preview iframe).
-      // Treat as success to keep the demo functional.
-      setSubmitted(true);
-      setEmail("");
-      setTimeout(() => setSubmitted(false), 6000);
+      setError("Network error. Make sure the app is running and try again.");
     } finally {
       setSubmitting(false);
     }
@@ -104,7 +108,7 @@ export default function AxiaLanding() {
   return (
     <div style={styles.root}>
       {/* === Inline font + global styles === */}
-      <style>{globalCSS}</style>
+      <style dangerouslySetInnerHTML={{ __html: globalCSS }} />
 
       {/* === Top nav === */}
       <Nav page={page} setPage={setPage} />
@@ -125,6 +129,7 @@ export default function AxiaLanding() {
           email={email}
           setEmail={setEmail}
           submitted={submitted}
+          submittedMessage={submittedMessage}
           submitting={submitting}
           error={error}
           handleSubmit={handleSubmit}
@@ -138,6 +143,7 @@ export default function AxiaLanding() {
         email={email}
         setEmail={setEmail}
         submitted={submitted}
+        submittedMessage={submittedMessage}
         submitting={submitting}
         error={error}
         handleSubmit={handleSubmit}
@@ -227,7 +233,9 @@ function Home(props) {
   );
 }
 
-function Hero({ email, setEmail, submitted, submitting, error, handleSubmit }) {
+function Hero(props) {
+  const { email, setEmail, submitted, submitting, error, handleSubmit } = props;
+  const submittedMessage = props.submittedMessage;
   return (
     <section style={styles.hero} className="axia-hero">
       <div style={styles.heroGrain} />
@@ -278,7 +286,7 @@ function Hero({ email, setEmail, submitted, submitting, error, handleSubmit }) {
           </div>
           <p style={styles.waitlistMeta}>
             {submitted
-              ? "✓ You're on the list. Check your inbox."
+              ? submittedMessage || "✓ You're on the list. Check your inbox."
               : error
               ? error
               : "Free during beta. No card required."}
@@ -632,7 +640,7 @@ function SocialProof() {
 // ============================================================
 // FINAL CTA
 // ============================================================
-function FinalCTA({ email, setEmail, submitted, submitting, error, handleSubmit }) {
+function FinalCTA({ email, setEmail, submitted, submittedMessage, submitting, error, handleSubmit }) {
   return (
     <section style={styles.finalCTA} className="axia-final-cta">
       <div style={styles.sectionInner}>
@@ -675,7 +683,7 @@ function FinalCTA({ email, setEmail, submitted, submitting, error, handleSubmit 
           </div>
           <p style={{ ...styles.waitlistMeta, color: "rgba(247,242,234,0.5)" }}>
             {submitted
-              ? "✓ You're on the list. Check your inbox."
+              ? submittedMessage || "✓ You're on the list. Check your inbox."
               : error
               ? error
               : "Free during beta. No card required."}
@@ -916,7 +924,8 @@ function SectionLabel({ num, children, light }) {
 // ============================================================
 // FOOTER
 // ============================================================
-function Footer({ email, setEmail, submitted, submitting, error, handleSubmit, setPage }) {
+function Footer(props) {
+  const { email, setEmail, submitted, submittedMessage, submitting, error, handleSubmit, setPage } = props;
   return (
     <footer style={styles.footer} className="axia-footer">
       <div style={styles.footerInner}>
@@ -977,7 +986,9 @@ function Footer({ email, setEmail, submitted, submitting, error, handleSubmit, s
               </button>
             </div>
             {submitted && (
-              <div style={styles.footerSubmitted}>✓ Subscribed.</div>
+              <div style={styles.footerSubmitted}>
+                {submittedMessage || "✓ Subscribed."}
+              </div>
             )}
             {error && !submitted && (
               <div style={{ ...styles.footerSubmitted, color: "var(--clay)" }}>{error}</div>
