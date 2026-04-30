@@ -1,0 +1,96 @@
+import { Resend } from "resend";
+
+let cached: Resend | null = null;
+
+export function getResend(): Resend {
+  if (cached) return cached;
+
+  const key = process.env.RESEND_API_KEY;
+  if (!key) {
+    throw new Error("Missing RESEND_API_KEY environment variable.");
+  }
+
+  cached = new Resend(key);
+  return cached;
+}
+
+export function getFromAddress(): string {
+  return process.env.RESEND_FROM_EMAIL || "Axia <hello@axiaradar.com>";
+}
+
+/**
+ * Welcome email template for new waitlist signups.
+ * Plain HTML, inline styles only — most email clients strip <style> blocks.
+ */
+export function welcomeEmail(): { subject: string; html: string; text: string } {
+  const subject = "You're on the Axia waitlist";
+
+  const text = [
+    "Welcome to Axia.",
+    "",
+    "You're on the list for what clients actually pay independent designers,",
+    "developers, photographers, and writers — by city, by skill, by experience level.",
+    "",
+    "We'll email you when the first quarterly Radar issue is ready, and again",
+    "when you're invited to the beta.",
+    "",
+    "— Axia",
+    "https://axiaradar.com",
+  ].join("\n");
+
+  const html = `
+<!doctype html>
+<html lang="en">
+  <body style="margin:0;padding:0;background:#f7f2ea;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#1f1a16;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f7f2ea;">
+      <tr>
+        <td align="center" style="padding:48px 16px;">
+          <table role="presentation" width="560" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;width:100%;background:#ffffff;border:1px solid #e8e0d3;border-radius:4px;">
+            <tr>
+              <td style="padding:40px 40px 24px 40px;">
+                <div style="font-family:Georgia,'Times New Roman',serif;font-size:28px;font-weight:700;letter-spacing:-0.01em;color:#1f1a16;">
+                  Axia<span style="color:#c26a47;">.</span>
+                </div>
+                <div style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#c26a47;margin-top:6px;">
+                  Freelance rate intelligence
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:0 40px 16px 40px;">
+                <h1 style="margin:0 0 12px 0;font-size:22px;line-height:1.25;font-weight:600;color:#1f1a16;">
+                  You're on the list.
+                </h1>
+                <p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:#3a322b;">
+                  Thanks for signing up. Axia is real market data on what clients pay
+                  independent designers, developers, photographers, and writers — by
+                  city, by skill, by experience level.
+                </p>
+                <p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:#3a322b;">
+                  Two things will happen from here:
+                </p>
+                <ul style="margin:0 0 16px 20px;padding:0;font-size:15px;line-height:1.6;color:#3a322b;">
+                  <li style="margin-bottom:8px;">You'll get the first quarterly <strong>Radar</strong> issue when it ships.</li>
+                  <li>You'll get an invite when the beta opens, in roughly the order you signed up.</li>
+                </ul>
+                <p style="margin:0 0 24px 0;font-size:15px;line-height:1.6;color:#3a322b;">
+                  No other emails. No spam. We hate it too.
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:24px 40px 32px 40px;border-top:1px solid #e8e0d3;">
+                <p style="margin:0;font-family:'Courier New',monospace;font-size:11px;letter-spacing:0.06em;color:#8a7f72;">
+                  Axia &middot; <a href="https://axiaradar.com" style="color:#c26a47;text-decoration:none;">axiaradar.com</a>
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>`.trim();
+
+  return { subject, html, text };
+}

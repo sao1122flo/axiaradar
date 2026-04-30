@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap');
+
+:root {
+  --bg: #f7f6f2;
+  --surface: #ffffff;
+  --border: #e5e2d8;
+  --text: #1a1a14;
+  --muted: #7a7a6a;
+  --dim: #ccc9be;
+  --teal: #04342C;
+  --teal-mid: #1D9E75;
+  --teal-light: #E1F5EE;
+  --amber: #EF9F27;
+  --amber-light: #FEF3E0;
+  --red: #E24B4A;
+  --red-light: #FDECEC;
+  --code-bg: #1a1a14;
+  --code-text: #9FE1CB;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); }
+
+/* TABS */
+.nav { display: flex; background: var(--teal); position: sticky; top: 0; z-index: 100; overflow-x: auto; }
+.nav-item { padding: 12px 16px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.5); cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; transition: all .2s; }
+.nav-item.active { color: var(--amber); border-bottom-color: var(--amber); }
+
+/* PANELS */
+.panel { display: none; padding: 1.5rem; max-width: 900px; }
+.panel.active { display: block; }
+
+/* TYPOGRAPHY */
+.page-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--teal); margin-bottom: 4px; }
+.page-sub { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 1.5rem; }
+.section-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 1.5rem 0 .75rem; }
+.section-label:first-child { margin-top: 0; }
+
+/* CARDS */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 10px; }
+.card-title { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+.card-body { font-size: 12.5px; color: #555; line-height: 1.65; }
+.card-body strong { color: var(--text); font-weight: 500; }
+.card-row { display: flex; align-items: flex-start; gap: 10px; }
+
+/* GRID */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+/* METRIC */
+.metric { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: .8rem 1rem; }
+.metric-label { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+.metric-val { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--teal); }
+.metric-sub { font-size: 11px; color: var(--dim); margin-top: 1px; }
+
+/* CODE BLOCK */
+.code { background: var(--code-bg); border-radius: 10px; padding: 1rem 1.25rem; margin: 8px 0; overflow-x: auto; }
+.code pre { font-family: 'DM Mono', monospace; font-size: 11.5px; color: var(--code-text); line-height: 1.7; white-space: pre; }
+.code .comment { color: #5a6a60; }
+.code .key { color: #EF9F27; }
+.code .val { color: #9FE1CB; }
+.code .str { color: #c8e6c9; }
+
+/* TIMELINE */
+.tl { position: relative; padding-left: 24px; }
+.tl::before { content: ''; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 1px; background: var(--border); }
+.tl-item { position: relative; margin-bottom: 1rem; }
+.tl-dot { position: absolute; left: -20px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--surface); border: 2px solid var(--teal-mid); }
+.tl-week { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--teal-mid); letter-spacing: .08em; margin-bottom: 3px; }
+.tl-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+.tl-items { font-size: 12px; color: #666; line-height: 1.7; }
+.tl-items li { list-style: none; padding: 1px 0; }
+.tl-items li::before { content: '→ '; color: var(--amber); }
+
+/* BADGE */
+.badge { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 20px; font-family: 'DM Mono', monospace; }
+.b-teal { background: var(--teal-light); color: var(--teal); }
+.b-amber { background: var(--amber-light); color: #7a4A00; }
+.b-red { background: var(--red-light); color: #7a1a1a; }
+.b-dark { background: var(--teal); color: var(--teal-light); }
+
+/* TABLE */
+.tbl { width: 100%; border-collapse: collapse; font-size: 12px; }
+.tbl th { text-align: left; font-family: 'DM Mono', monospace; font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding: 7px 10px; border-bottom: 1px solid var(--border); }
+.tbl td { padding: 8px 10px; border-bottom: 1px solid #f0ede6; color: #444; vertical-align: top; }
+.tbl tr:last-child td { border-bottom: none; }
+.tbl td:first-child { color: var(--text); font-weight: 500; }
+
+/* DIVIDER */
+hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
+
+/* ALERT */
+.alert { border-left: 3px solid; border-radius: 0 8px 8px 0; padding: 10px 12px; margin-bottom: 8px; font-size: 12.5px; line-height: 1.6; }
+.alert-amber { border-color: var(--amber); background: var(--amber-light); color: #5a3800; }
+.alert-teal { border-color: var(--teal-mid); background: var(--teal-light); color: var(--teal); }
+.alert-red { border-color: var(--red); background: var(--red-light); color: #7a1a1a; }
+.alert strong { font-weight: 600; }
+
+/* PILL LIST */
+.pill-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.pill { font-size: 11px; padding: 4px 10px; border-radius: 20px; background: var(--bg); border: 1px solid var(--border); color: var(--text); }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-item active" onclick="show('strategy')">01 · Estrategia</div>
+  <div class="nav-item" onclick="show('data')">02 · Datos</div>
+  <div class="nav-item" onclick="show('tech')">03 · Stack técnico</div>
+  <div class="nav-item" onclick="show('mvp')">04 · MVP semana a semana</div>
+  <div class="nav-item" onclick="show('product')">05 · Producto</div>
+  <div class="nav-item" onclick="show('go')">06 · Go-to-market</div>
+  <div class="nav-item" onclick="show('money')">07 · Monetización</div>
+</div>
+
+<!-- ===== 01 ESTRATEGIA ===== -->
+<div class="panel active" id="panel-strategy">
+  <div class="page-title">RateRadar — Plan maestro</div>
+  <div class="page-sub">Benchmark de mercado para freelancers en EE.UU. No una calculadora — inteligencia externa de lo que el mercado realmente paga, localizada, con capas de retención.</div>
+
+  <div class="alert alert-amber"><strong>Crítica incorporada #1 — El problema de datos.</strong> Los datos BLS son reales pero de mercado laboral (empleados). No son rates freelance. La estrategia es usarlos como ancla de credibilidad + enrichment con datos de plataformas + crowdsourcing controlado. No vender BLS solo — eso no es diferenciador.</div>
+
+  <div class="alert alert-teal"><strong>Crítica incorporada #2 — Retención.</strong> "Consulta una vez y se va" es el riesgo real. La solución es diseñar el producto con capas: benchmark → calculadora híbrida → alertas de tendencia → reporte personal guardado. Cada capa agrega razón para volver.</div>
+
+  <div class="alert alert-red"><strong>Crítica incorporada #3 — Nombre.</strong> rateradar.com está tomado (app de currency). Opciones sugeridas: <strong>rateradar.app · rateradar.io · getrateradar.com · radarrates.com</strong> — verificar disponibilidad antes de lanzar.</div>
+
+  <div class="section-label">Posicionamiento exacto</div>
+  <div class="card">
+    <div class="card-title">NO eres una calculadora de rate</div>
+    <div class="card-body">Upwork, Harvest, Briskly, Freelanceratecalculator.com — todos calculan hacia adentro: "ingresa tu meta de ingreso → te digo cuánto cobrar." <strong>Eso ya existe y es gratis.</strong><br><br>RateRadar mira hacia afuera: "esto es lo que el mercado paga hoy en tu ciudad para tu skill, en el percentil donde estás." La combinación BLS + plataformas + geolocalización real es el moat. contractrates.fyi es crowdsourced y sin UX. Jobbers.io es un marketplace con content marketing. SalarySavvy no tiene granularidad geográfica real en EE.UU.</div>
+  </div>
+
+  <div class="section-label">Los 3 diferenciadores no negociables</div>
+  <div class="grid-3">
+    <div class="metric"><div class="metric-label">Diferenciador 1</div><div class="metric-val" style="font-size:14px">Geo-granular</div><div class="metric-sub">Ciudad + zip code, no promedios nacionales</div></div>
+    <div class="metric"><div class="metric-label">Diferenciador 2</div><div class="metric-val" style="font-size:14px">Híbrido</div><div class="metric-sub">Market rate + recomendación personal en una sola vista</div></div>
+    <div class="metric"><div class="metric-label">Diferenciador 3</div><div class="metric-val" style="font-size:14px">Tendencias</div><div class="metric-sub">Alertas cuando tu skill sube/baja en tu zona</div></div>
+  </div>
+</div>
+
+<!-- ===== 02 DATOS ===== -->
+<div class="panel" id="panel-data">
+  <div class="page-title">Arquitectura de datos</div>
+  <div class="page-sub">3 capas que juntas crean algo que ningún competidor tiene. Cada capa se construye en orden — no en paralelo.</div>
+
+  <div class="section-label">Capa 1 — Ancla de credibilidad (BLS OEWS)</div>
+  <div class="card">
+    <div class="card-body"><strong>Qué es:</strong> Occupational Employment and Wage Statistics. 830 ocupaciones × 600+ MSAs (áreas metropolitanas). Percentiles P10/P25/P50/P75/P90 de salario anual por área. Actualización anual (mayo).<br><br><strong>Por qué importa:</strong> Es la única fuente de datos salariales con metodología estadística rigurosa y cobertura nacional real. Le da a RateRadar credibilidad institucional que contractrates.fyi nunca tendrá.<br><br><strong>Limitación real:</strong> Son salarios de empleados, no rates freelance. Hay que transformar: rate freelance ≈ (salario/hora × 1.4 a 1.8) para cubrir self-employment tax, overhead, y tiempo no billable. Este multiplicador debe ser transparente en el UI.</div>
+  </div>
+  <div class="code"><pre><span class="comment"># BLS API — completamente gratis, sin key requerida</span>
+<span class="key">endpoint</span>: <span class="str">https://api.bls.gov/publicAPI/v2/timeseries/data/</span>
+<span class="key">series_id</span>: <span class="str">OEUS[STATE][AREA][SOC][DATATYPE]</span>
+<span class="comment"># Ejemplo: OEUS060710000000015000003
+# 06 = California, 071000 = San Francisco MSA
+# 0000015 = SOC 15-xxxx (Computer & Math)
+# 0003 = median annual wage</span>
+
+<span class="comment"># También disponible como bulk CSV — recomendado para ingesta inicial</span>
+<span class="key">bulk_download</span>: <span class="str">https://download.bls.gov/pub/time.series/oe/</span></pre></div>
+
+  <div class="section-label">Capa 2 — Signal de plataformas (enriquecimiento)</div>
+  <div class="card">
+    <div class="card-body"><strong>Upwork Rate Insights (scraping ético):</strong> Upwork muestra rangos de rate por skill en sus páginas públicas de categorías. Actualizarlo mensualmente. No es un API oficial pero es información pública.<br><br><strong>LinkedIn Jobs scraping:</strong> Las ofertas de trabajo contienen rangos salariales (obligatorio en CA, NY, CO y otros estados desde 2023). Son rates de mercado actuales, no históricos.<br><br><strong>Indeed salary data:</strong> Indeed publica medianas de salario por job title + ciudad. API parcialmente disponible.<br><br><strong>Importante:</strong> Estos datos tienen bias hacia abajo (incluyen offshore). Usarlos como floor/ceiling, no como verdad absoluta. El UI debe indicar la fuente de cada dato.</div>
+  </div>
+
+  <div class="section-label">Capa 3 — Crowdsourcing controlado (ventaja defensiva)</div>
+  <div class="card">
+    <div class="card-body"><strong>El problema de contractrates.fyi:</strong> cualquiera puede reportar cualquier rate — sin verificación, sin contexto, con bias enorme.<br><br><strong>La solución de RateRadar:</strong> crowdsourcing con fricción mínima pero con contexto obligatorio. Para reportar tu rate, debes proveer: años de experiencia, ciudad, skill específico (no solo "developer"), tipo de cliente (startup / enterprise / agencia), y si incluye o no gestión de proyecto. Sin estos campos, el dato no se acepta.<br><br>Los datos reportados se muestran con banda de confianza: "Basado en 12 reportes verificados en Austin para React developer mid-level." El número de reportes es visible — honestidad total sobre el tamaño de la muestra.<br><br><strong>Incentivo para reportar:</strong> solo los usuarios que reportan su rate ven el detalle de los datos de otros (percentiles granulares). Free tier ve promedios. Pro tier ve percentiles. Contributors ven datos raw.</div>
+  </div>
+
+  <div class="section-label">Qué datos tienes el día 1 vs qué construyes después</div>
+  <table class="tbl">
+    <thead><tr><th>Fuente</th><th>Disponibilidad</th><th>Granularidad</th><th>Costo</th><th>Prioridad</th></tr></thead>
+    <tbody>
+      <tr><td>BLS OEWS bulk CSV</td><td>Inmediata</td><td>600+ MSAs, 830 SOC</td><td>Gratis</td><td><span class="badge b-dark">Día 1</span></td></tr>
+      <tr><td>LinkedIn salary range scraping</td><td>1–2 días</td><td>Ciudad + job title</td><td>Gratis (ops)</td><td><span class="badge b-dark">Semana 1</span></td></tr>
+      <tr><td>Upwork category rates scraping</td><td>3–5 días</td><td>Skill, no ciudad</td><td>Gratis (ops)</td><td><span class="badge b-teal">Semana 2</span></td></tr>
+      <tr><td>Indeed salary API</td><td>1 semana (review)</td><td>Job title + ciudad</td><td>Gratis hasta limits</td><td><span class="badge b-teal">Semana 2</span></td></tr>
+      <tr><td>Crowdsourcing propio</td><td>Post-lanzamiento</td><td>Muy granular si crece</td><td>$0 (user-generated)</td><td><span class="badge b-amber">Mes 2+</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== 03 STACK TÉCNICO ===== -->
+<div class="panel" id="panel-tech">
+  <div class="page-title">Stack técnico</div>
+  <div class="page-sub">Diseñado para un founder solo o equipo de 2. Velocidad sobre perfección. Todo reemplazable después.</div>
+
+  <div class="section-label">Stack recomendado</div>
+  <div class="grid-2">
+    <div>
+      <div class="card" style="margin-bottom:8px">
+        <div class="card-title">Frontend</div>
+        <div class="card-body"><strong>Next.js 14 (App Router)</strong> — SSR para SEO en páginas de skills/ciudades que es el canal orgánico principal. Tailwind CSS. Recharts o Nivo para visualizaciones de percentiles. Vercel para deploy (gratis en early stage).</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Auth + pagos</div>
+        <div class="card-body"><strong>Clerk</strong> para auth (tiene free tier generoso, mejor DX que Auth.js). <strong>Stripe</strong> para suscripciones con billing portal incluido. Ambos tienen SDKs de Next.js nativos.</div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:8px">
+        <div class="card-title">Backend + DB</div>
+        <div class="card-body"><strong>Supabase</strong> (Postgres + API + Row Level Security). Gratis hasta 500MB. Perfecto para datos BLS que son estructurados y relacionales. PostGIS para queries geoespaciales por ciudad/zip code.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Data pipeline</div>
+        <div class="card-body"><strong>Python scripts</strong> para ingesta BLS + scraping. <strong>GitHub Actions</strong> para correr updates mensuales automáticamente (gratis). <strong>Playwright</strong> para scraping de LinkedIn/Upwork con rate limiting.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label">Estructura de base de datos</div>
+  <div class="code"><pre><span class="comment">-- Tabla core: datos BLS procesados</span>
+<span class="key">CREATE TABLE</span> wage_benchmarks (
+  id           uuid PRIMARY KEY,
+  soc_code     varchar(10),    <span class="comment">-- "15-1252" (Software Dev)</span>
+  soc_title    varchar(200),
+  area_code    varchar(10),    <span class="comment">-- MSA FIPS code</span>
+  area_name    varchar(200),   <span class="comment">-- "San Francisco-Oakland-Hayward, CA"</span>
+  state        varchar(2),
+  p25_annual   integer,        <span class="comment">-- salary percentile 25</span>
+  p50_annual   integer,
+  p75_annual   integer,
+  p90_annual   integer,
+  p25_hourly   decimal(8,2),
+  p50_hourly   decimal(8,2),
+  p75_hourly   decimal(8,2),
+  p90_hourly   decimal(8,2),
+  data_year    integer,
+  source       varchar(50),    <span class="comment">-- 'BLS_OEWS'</span>
+  updated_at   timestamp
+);
+
+<span class="comment">-- Tabla: rates freelance calculados</span>
+<span class="key">CREATE TABLE</span> freelance_rates (
+  id           uuid PRIMARY KEY,
+  benchmark_id uuid REFERENCES wage_benchmarks,
+  multiplier   decimal(4,2),   <span class="comment">-- 1.4 a 1.8 según SOC</span>
+  p25_rate     decimal(8,2),   <span class="comment">-- rate freelance recomendado</span>
+  p50_rate     decimal(8,2),
+  p75_rate     decimal(8,2),
+  platform_low decimal(8,2),   <span class="comment">-- de scraping Upwork/Indeed</span>
+  platform_hi  decimal(8,2),
+  confidence   varchar(10)     <span class="comment">-- 'high'|'medium'|'low'</span>
+);
+
+<span class="comment">-- Tabla: crowdsourcing controlado</span>
+<span class="key">CREATE TABLE</span> user_rates (
+  id           uuid PRIMARY KEY,
+  soc_code     varchar(10),
+  city         varchar(100),
+  state        varchar(2),
+  experience_years  integer,
+  client_type  varchar(20),    <span class="comment">-- 'startup'|'enterprise'|'agency'</span>
+  includes_pm  boolean,
+  hourly_rate  decimal(8,2),
+  verified     boolean DEFAULT false,
+  created_at   timestamp
+);</pre></div>
+
+  <div class="section-label">Script de ingesta BLS (día 1)</div>
+  <div class="code"><pre><span class="comment"># download_bls.py — corre una vez, luego GitHub Action mensual</span>
+<span class="key">import</span> pandas <span class="key">as</span> pd
+<span class="key">import</span> requests
+
+<span class="comment"># BLS bulk data — archivo principal de OEWS</span>
+url = <span class="str">"https://download.bls.gov/pub/time.series/oe/oe.data.1.AllData"</span>
+area_url = <span class="str">"https://download.bls.gov/pub/time.series/oe/oe.area"</span>
+occ_url = <span class="str">"https://download.bls.gov/pub/time.series/oe/oe.occupation"</span>
+
+<span class="comment"># También disponible como Excel por MSA en:
+# https://www.bls.gov/oes/tables.htm (Mayo 2024, más reciente disponible)
+# Descarga "Metropolitan and nonmetropolitan area" → todos los MSAs en un ZIP</span>
+
+<span class="comment"># El ZIP contiene un Excel por MSA — ~600 archivos
+# Cada uno tiene hojas por occupation group
+# Columnas clave: OCC_CODE, OCC_TITLE, H_PCT25, H_MEDIAN, H_PCT75, H_PCT90</span>
+
+<span class="key">def</span> parse_msa_excel(filepath, area_name, area_code):
+    df = pd.read_excel(filepath, sheet_name=<span class="str">'MSA_dl'</span>)
+    df = df[df[<span class="str">'O_GROUP'</span>] == <span class="str">'detailed'</span>]  <span class="comment"># solo ocupaciones detalladas</span>
+    df[<span class="str">'area_name'</span>] = area_name
+    df[<span class="str">'area_code'</span>] = area_code
+    <span class="key">return</span> df[[
+        <span class="str">'OCC_CODE'</span>, <span class="str">'OCC_TITLE'</span>, <span class="str">'area_name'</span>, <span class="str">'area_code'</span>,
+        <span class="str">'H_PCT25'</span>, <span class="str">'H_MEDIAN'</span>, <span class="str">'H_PCT75'</span>, <span class="str">'H_PCT90'</span>,
+        <span class="str">'A_PCT25'</span>, <span class="str">'A_MEDIAN'</span>, <span class="str">'A_PCT75'</span>, <span class="str">'A_PCT90'</span>  <span class="comment"># annual</span>
+    ]]</pre></div>
+
+</div>
+
+<!-- ===== 04 MVP SEMANA A SEMANA ===== -->
+<div class="panel" id="panel-mvp">
+  <div class="page-title">Plan semana a semana — 6 semanas al primer $</div>
+  <div class="page-sub">Semanas 1–2: solo datos y backend. Semanas 3–4: UI y producto. Semana 5: pagos y lanzamiento. Semana 6: iteración con usuarios reales.</div>
+
+  <div class="tl">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-week">Semana 1 — Datos</div>
+      <div class="tl-title">Pipeline BLS + base de datos</div>
+      <ul class="tl-items">
+        <li>Descargar bulk data BLS OEWS (Excel por MSA, ~600 archivos)</li>
+        <li>Script Python para parsear y normalizar → Supabase</li>
+        <li>Mapeo de SOC codes a skills que los freelancers reconocen ("React Developer" → SOC 15-1252)</li>
+        <li>Tabla de multiplicadores freelance por categoría (tech x1.6, design x1.5, writing x1.4)</li>
+        <li>Entregable: query "dame el rate en San Francisco para React developer mid-level" funciona en Supabase</li>
+      </ul>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-week">Semana 2 — Enriquecimiento + dominio</div>
+      <div class="tl-title">Scraping de plataformas + setup</div>
+      <ul class="tl-items">
+        <li>Playwright scraper para páginas de rates de Upwork por skill category</li>
+        <li>Scraper de salary ranges en ofertas de trabajo de LinkedIn (ciudades target)</li>
+        <li>Registrar dominio (rateradar.app o getrateradar.com según disponibilidad)</li>
+        <li>Setup Next.js + Supabase + Clerk + Vercel — deploy básico</li>
+        <li>Entregable: landing page estática live con waitlist email</li>
+      </ul>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-week">Semana 3 — Producto core</div>
+      <div class="tl-title">La búsqueda que funciona</div>
+      <ul class="tl-items">
+        <li>Search bar: skill + ciudad → resultado con percentiles P25/P50/P75/P90</li>
+        <li>Visualización: gráfico de barras horizontal con tu posición marcada</li>
+        <li>Cálculo híbrido: "El mercado paga $X. Con tu overhead estimado, cobra mínimo $Y."</li>
+        <li>Free tier: 3 búsquedas sin login, resultados con P50 visible</li>
+        <li>Gating: percentiles completos solo con cuenta creada</li>
+      </ul>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-week">Semana 4 — Retención</div>
+      <div class="tl-title">Las capas que hacen que vuelvan</div>
+      <ul class="tl-items">
+        <li>"Mi benchmark guardado" — el usuario guarda su skill + ciudad y lo puede revisitar</li>
+        <li>Calculadora híbrida completa: inputs (gastos mensuales, semanas vacaciones, % billable) → rate mínimo recomendado vs mercado</li>
+        <li>Sección "Consejos de negociación" generados con IA basados en el gap entre su rate actual y el P75</li>
+        <li>Formulario de crowdsourcing: reporta tu rate → desbloquea datos más granulares</li>
+      </ul>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-week">Semana 5 — Monetización + lanzamiento</div>
+      <div class="tl-title">Stripe live + primeros usuarios pagando</div>
+      <ul class="tl-items">
+        <li>Stripe integrado: plan Pro $9/mes, plan anual $79/año</li>
+        <li>Billing portal para self-service cancel/upgrade</li>
+        <li>Sistema de alertas por email (Resend): "Los rates para tu skill subieron X% en tu ciudad"</li>
+        <li>Post en r/freelance + r/webdev + r/digitalnomad con datos reales como hook</li>
+        <li>Product Hunt draft preparado</li>
+        <li>Objetivo: 10 usuarios Pro pagando = $90 MRR</li>
+      </ul>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-week">Semana 6 — Iteración</div>
+      <div class="tl-title">Aprender de los primeros 50 usuarios</div>
+      <ul class="tl-items">
+        <li>Instalar PostHog (analytics gratuito) desde día 1 — ver dónde se van</li>
+        <li>5 entrevistas de usuario en Discord/Slack communities de freelancers</li>
+        <li>¿Qué skill/ciudad falta? Priorizarlo para la siguiente semana de datos</li>
+        <li>Product Hunt launch si hay 200+ waitlist signups</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-label">El riesgo principal en el MVP</div>
+  <div class="alert alert-amber"><strong>El SOC code mapping es el trabajo más tedioso.</strong> Los freelancers no dicen "SOC 15-1252" — dicen "React developer", "brand designer", "copywriter". Necesitas una tabla de mapeo skill-nombre → SOC code. Hay ~200–300 skills comunes que cubren el 90% de los freelancers de tech, diseño y marketing. Esto toma 1–2 días de trabajo manual pero es crítico para que la búsqueda funcione bien.</div>
+</div>
+
+<!-- ===== 05 PRODUCTO ===== -->
+<div class="panel" id="panel-product">
+  <div class="page-title">Diseño del producto</div>
+  <div class="page-sub">Tres capas de valor que justifican la retención. Cada capa es una razón más para quedarse.</div>
+
+  <div class="section-label">Capa 1 — Market benchmark (la razón para entrar)</div>
+  <div class="card">
+    <div class="card-title">El output de una búsqueda</div>
+    <div class="card-body">
+      Input: <strong>"UX Designer · Austin, TX · Mid-level"</strong><br><br>
+      Output:<br>
+      • <strong>P25:</strong> $68/hr — "25% del mercado cobra menos que esto"<br>
+      • <strong>P50:</strong> $88/hr — "La mitad del mercado"<br>
+      • <strong>P75:</strong> $115/hr — "Top 25% del mercado"<br>
+      • <strong>P90:</strong> $145/hr — "Top 10% del mercado"<br><br>
+      Fuentes mostradas: BLS OEWS May 2024 + LinkedIn salary ranges (23 ofertas en Austin, último trimestre)<br><br>
+      Rate freelance recomendado (visible solo con cuenta): <strong>$98–130/hr</strong> (multiplicador 1.4–1.5 para cubrir overhead)
+    </div>
+  </div>
+
+  <div class="section-label">Capa 2 — Calculadora híbrida (la razón para quedarse)</div>
+  <div class="card">
+    <div class="card-title">Benchmark + tus números reales</div>
+    <div class="card-body">
+      El usuario ingresa (una sola vez, guardado en su perfil):<br>
+      • Gastos mensuales fijos: $X<br>
+      • Semanas de vacaciones/año: X<br>
+      • % tiempo billable estimado: X%<br>
+      • Tier de experiencia (junior/mid/senior)<br><br>
+      Output combinado:<br>
+      <strong>"El mercado paga $88–115/hr para UX Designer mid en Austin.<br>
+      Con tus gastos, necesitas cobrar mínimo $75/hr para no perder dinero.<br>
+      → Recomendamos apuntar a $95–105/hr. Estás en el P55 del mercado."</strong><br><br>
+      Además: "Si subes tu rate a $115/hr, necesitas X clientes/mes para cubrir tus gastos."
+    </div>
+  </div>
+
+  <div class="section-label">Capa 3 — Tendencias y alertas (la razón para pagar)</div>
+  <div class="card">
+    <div class="card-title">El producto recurrente</div>
+    <div class="card-body">
+      • Actualización trimestral de datos BLS + scraping de plataformas<br>
+      • Email mensual: "Tendencias de mercado para tu skill en tu ciudad"<br>
+      • Alerta: "Los rates para React developer en Austin subieron 8% vs hace 6 meses"<br>
+      • "Tu benchmark guardado ha cambiado — revisa dónde estás ahora"<br><br>
+      <strong>Esta capa es lo que convierte una consulta única en $9/mes recurrente.</strong> Sin ella, el churn es muy alto.
+    </div>
+  </div>
+
+  <div class="section-label">Navegación y páginas del MVP</div>
+  <table class="tbl">
+    <thead><tr><th>Página</th><th>Propósito</th><th>Gate</th></tr></thead>
+    <tbody>
+      <tr><td>/</td><td>Landing + search bar principal + social proof</td><td>Pública</td></tr>
+      <tr><td>/rates/[skill]/[city]</td><td>Resultado de búsqueda indexable (SEO)</td><td>P50 público, resto gate</td></tr>
+      <tr><td>/dashboard</td><td>Benchmarks guardados + calculadora</td><td>Login</td></tr>
+      <tr><td>/alerts</td><td>Configurar alertas por skill + ciudad</td><td>Pro</td></tr>
+      <tr><td>/contribute</td><td>Formulario de crowdsourcing</td><td>Login</td></tr>
+      <tr><td>/report/[skill]/[city]</td><td>PDF descargable de benchmark completo</td><td>Pro</td></tr>
+    </tbody>
+  </table>
+
+  <div class="alert alert-teal" style="margin-top:1rem"><strong>SEO como canal principal:</strong> Cada combinación skill + ciudad es una página indexable. "UX designer hourly rate Austin TX", "React developer pay San Francisco 2026", etc. Con 830 skills × 50 ciudades = 41,500 páginas potenciales con datos reales. Este es el canal de adquisición más barato y sostenible.</div>
+</div>
+
+<!-- ===== 06 GO-TO-MARKET ===== -->
+<div class="panel" id="panel-go">
+  <div class="page-title">Go-to-market</div>
+  <div class="page-sub">Adquisición barata y rápida. Sin ads al inicio. Todo orgánico + comunidades.</div>
+
+  <div class="section-label">Semana 5 — Lanzamiento en comunidades</div>
+  <div class="card">
+    <div class="card-title">El post que funciona en Reddit</div>
+    <div class="card-body">No es "lancé mi producto, míralo." Es: <strong>"Analicé los datos BLS + LinkedIn para saber qué pagan realmente los UX designers en las 10 ciudades más grandes de EE.UU. — aquí están los números."</strong><br><br>
+    El post incluye: tabla real con P25/P50/P75 por ciudad, ciudades sorprendentes (Austin ya supera a NYC en ciertos skills), análisis breve. Al final: "Construí una herramienta para hacer esto para cualquier skill — gratis para los primeros 200."<br><br>
+    Comunidades target: r/freelance (580K), r/webdev (900K), r/graphic_design (200K), r/digitalnomad (400K), r/UXDesign (150K)</div>
+  </div>
+
+  <div class="section-label">Canales de adquisición por etapa</div>
+  <table class="tbl">
+    <thead><tr><th>Canal</th><th>Etapa</th><th>Costo</th><th>Volumen esperado</th></tr></thead>
+    <tbody>
+      <tr><td>Reddit (post con datos)</td><td>Lanzamiento</td><td>$0</td><td>500–2,000 visits/post</td></tr>
+      <tr><td>Twitter/X threads con datos</td><td>Lanzamiento + ongoing</td><td>$0</td><td>200–1,000 impresiones</td></tr>
+      <tr><td>Product Hunt</td><td>Semana 6</td><td>$0</td><td>500–3,000 visits en 24h</td></tr>
+      <tr><td>SEO (páginas skill + ciudad)</td><td>Mes 2+</td><td>$0</td><td>Crecimiento compuesto</td></tr>
+      <tr><td>Newsletter de freelancers (sponsor)</td><td>Mes 3+</td><td>$200–500/issue</td><td>200–500 clicks dirigidos</td></tr>
+      <tr><td>Integración con herramientas (Notion, Bonsai)</td><td>Mes 4+</td><td>Tiempo de dev</td><td>Distribución de partners</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-label">El canal de distribución más subestimado</div>
+  <div class="card">
+    <div class="card-title">Discord y Slack de freelancers</div>
+    <div class="card-body">Hay +200 comunidades de Discord/Slack para freelancers, developers, designers con 1,000–50,000 miembros. El canal #tools o #resources es donde la gente comparte herramientas que usa. <strong>Un mensaje genuino ("construí esto porque yo mismo lo necesitaba, ¿feedback?") en 20 comunidades puede traer más usuarios que Product Hunt.</strong> La clave es participar antes de postear — no hacer spam.</div>
+  </div>
+</div>
+
+<!-- ===== 07 MONETIZACIÓN ===== -->
+<div class="panel" id="panel-money">
+  <div class="page-title">Monetización y proyección</div>
+  <div class="page-sub">Modelo freemium + suscripción. Optimizado para conversión en los primeros 90 días.</div>
+
+  <div class="section-label">Tiers de precio</div>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title">Free</div>
+      <div class="card-body">• 3 búsquedas/mes sin login<br>• Solo P50 (mediana)<br>• Sin historial guardado<br>• Sin calculadora<br><br><strong>$0/mes</strong><br><span class="badge b-teal">Top of funnel</span></div>
+    </div>
+    <div class="card" style="border-color: var(--teal);">
+      <div class="card-title">Pro ⭐</div>
+      <div class="card-body">• Búsquedas ilimitadas<br>• P25/P50/P75/P90 completos<br>• Calculadora híbrida<br>• Benchmarks guardados<br>• Alertas por email<br>• PDF descargable<br><br><strong>$9/mes · $79/año</strong><br><span class="badge b-dark">Principal conversión</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Contributor</div>
+      <div class="card-body">• Todo Pro<br>• Acceso a datos raw de crowdsourcing<br>• Ver distribución de rates reportados<br>• Badge "Verified contributor"<br><br><strong>$0</strong> si reportas tu rate<br><span class="badge b-amber">Incentivo datos</span></div>
+    </div>
+  </div>
+
+  <div class="section-label">Proyección de ingresos (conservadora)</div>
+  <table class="tbl">
+    <thead><tr><th>Mes</th><th>Usuarios free</th><th>Usuarios Pro</th><th>MRR</th><th>Hitos</th></tr></thead>
+    <tbody>
+      <tr><td>Mes 1</td><td>300</td><td>10</td><td>$90</td><td>Lanzamiento Reddit + PH</td></tr>
+      <tr><td>Mes 2</td><td>800</td><td>35</td><td>$315</td><td>SEO empieza a indexar</td></tr>
+      <tr><td>Mes 3</td><td>2,000</td><td>80</td><td>$720</td><td>Primeras alertas enviadas</td></tr>
+      <tr><td>Mes 4</td><td>4,000</td><td>150</td><td>$1,350</td><td>Crowdsourcing con 500+ reportes</td></tr>
+      <tr><td>Mes 6</td><td>10,000</td><td>350</td><td>$3,150</td><td>SEO trae 60%+ del tráfico</td></tr>
+      <tr><td>Mes 12</td><td>40,000</td><td>1,200</td><td>$10,800</td><td>ARR $130K, equipo de 2</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-label">Métricas clave a monitorear desde día 1</div>
+  <div class="grid-2">
+    <div class="metric"><div class="metric-label">Conversión free → Pro</div><div class="metric-val">Objetivo: 3–5%</div><div class="metric-sub">Industria: 2–4% para freemium</div></div>
+    <div class="metric"><div class="metric-label">Churn mensual</div><div class="metric-val">Objetivo: &lt;5%</div><div class="metric-sub">Alertas y tendencias son la palanca</div></div>
+    <div class="metric"><div class="metric-label">CAC</div><div class="metric-val">Objetivo: &lt;$5</div><div class="metric-sub">Con SEO + Reddit = casi $0</div></div>
+    <div class="metric"><div class="metric-label">LTV (Pro anual)</div><div class="metric-val">$108</div><div class="metric-sub">A $9/mes con 12 meses retención</div></div>
+  </div>
+
+  <div class="section-label">Expansión de ingresos (mes 6+)</div>
+  <div class="card">
+    <div class="card-body"><strong>API access:</strong> Agencias de staffing, plataformas de freelancing, y HR tools quieren acceso programático a los rate benchmarks. $99–499/mes por API key con rate limits.<br><br><strong>Reportes por industria:</strong> "State of Freelance Rates en Tech Q1 2026" — PDF pagado a $49 o gratis como lead magnet con email capture.<br><br><strong>White label para comunidades:</strong> Slack/Discord communities de freelancers pueden embeber el benchmark widget con su branding. Revenue share o flat fee mensual.</div>
+  </div>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

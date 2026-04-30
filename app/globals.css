@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* The Axia landing brings its own inline styles + injected fonts/keyframes,
+   so we keep this file minimal — just a sensible reset baseline. */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #f7f2ea;
+  color: #1f1a16;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
