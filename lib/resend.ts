@@ -15,7 +15,19 @@ export function getResend(): Resend {
 }
 
 export function getFromAddress(): string {
-  return process.env.RESEND_FROM_EMAIL || "Axia <hello@axiaradar.com>";
+  const raw = (process.env.RESEND_FROM_EMAIL ?? "Axia <hello@axiaradar.com>").trim();
+  const sanitized = raw.replace(/^['"]|['"]$/g, "").trim();
+
+  const displayMatch = sanitized.match(/^(.+?)\s*<([^>]+)>$/);
+  if (displayMatch) {
+    return `${displayMatch[1].trim()} <${displayMatch[2].trim()}>`;
+  }
+
+  if (sanitized.includes("@")) {
+    return sanitized;
+  }
+
+  return "Axia <hello@axiaradar.com>";
 }
 
 /**

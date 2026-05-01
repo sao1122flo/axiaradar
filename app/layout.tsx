@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
-import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://axiaradar.com";
-const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -24,6 +22,11 @@ export const metadata: Metadata = {
     description:
       "What clients actually pay. Not a calculator. The actual percentiles.",
   },
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
   robots: {
     index: true,
     follow: true,
@@ -37,8 +40,22 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-WFT3Z7DFLY"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'G-WFT3Z7DFLY');`,
+          }}
+        />
+      </head>
       <body>{children}</body>
-      {GA_ID ? <GoogleAnalytics gaId={GA_ID} /> : null}
     </html>
   );
 }
