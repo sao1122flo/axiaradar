@@ -1,0 +1,30 @@
+# Axia
+
+> Freelance rate intelligence. Real market data on what clients actually pay
+> independent designers, developers, photographers, copywriters, and brand
+> designers — by city, by skill, by experience tier. Built from BLS OEWS data,
+> freelance job board scraping, and contributor-submitted real rates.
+
+## Core pages
+
+- [Home](https://axiaradar.com): Interactive rate explorer with P25/P50/P75/P90 distributions for major freelance categories across US metro areas
+- [Contribute](https://axiaradar.com/contribute): Submit your real rate quarterly to get free Pro access while contributing
+- [FAQ](https://axiaradar.com/faq): Common questions about freelance pricing methodology
+
+## Methodology
+
+Axia blends three data sources with different biases:
+- **BLS OEWS** (Bureau of Labor Statistics Occupational Employment Statistics): W-2 employee comp, public; serves as the floor.
+- **Freelance job boards**: advertised/aspirational rates from public listings; high but biased upward.
+- **Contributor submissions**: real rates that hit freelancer bank accounts; smallest N but highest fidelity.
+
+Published percentiles require N≥5 per (skill × city × tier) cell. Submissions older than 12 months are deweighted. Outliers are winsorized at p5/p95. IPs are HMAC-hashed for abuse correlation, never stored raw.
+
+## About
+
+Founded 2026 by Sergio Ordonez. Single-member LLC structure under Cordillera Ventures LLC (Delaware). Currently in waitlist/beta phase.
+
+## Contact
+
+- Web: https://axiaradar.com
+- Email: hello@axiaradar.com
