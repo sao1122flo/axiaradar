@@ -180,6 +180,9 @@ function Nav({ page, setPage }) {
             <NavLink active={page === "pricing"} onClick={() => setPage("pricing")}>
               Pricing
             </NavLink>
+            <a href="/contribute" className="axia-nav-link" style={styles.navLink}>
+              Contribute
+            </a>
           </span>
           <button
             style={styles.navCTA}
@@ -803,7 +806,7 @@ function Pricing({ setPage }) {
             price="$0"
             period="forever"
             features={[
-              "3 benchmark queries per month",
+              "10 searches per month",
               "Median (P50) percentile only",
               "Single-source view (BLS)",
               "No saved searches",
@@ -824,6 +827,7 @@ function Pricing({ setPage }) {
             price="$9"
             period="per month, billed monthly"
             secondary="$79 / year"
+            badge="Save $29 · 2 months free"
             features={[
               "Unlimited benchmark queries",
               "Full P25 / P50 / P75 / P90 percentiles",
@@ -834,7 +838,6 @@ function Pricing({ setPage }) {
               "PDF benchmark reports",
             ]}
             cta="Join Pro waitlist"
-            featured
             onCTA={() => {
               setPage("home");
               setTimeout(() => {
@@ -845,23 +848,21 @@ function Pricing({ setPage }) {
           />
           <PriceTier
             name="Contributor"
-            tagline="Pro, free, in exchange for data."
+            tagline="Submit your rate quarterly. Get full Pro access while you contribute."
             price="$0"
             period="if you report your verified rate"
             features={[
-              "Everything in Pro",
-              "Access to raw contributor data",
-              "Distribution view of reported rates",
-              "Verified Contributor badge",
-              "Limited to first 200 in beta",
+              "Full Pro access while you contribute",
+              "See your rate vs. peers in real time",
+              "Early access to the Radar",
+              "Help shape categories and methodology",
             ]}
             cta="Apply"
+            featured
             onCTA={() => {
-              setPage("home");
-              setTimeout(() => {
-                const el = document.getElementById("waitlist");
-                if (el) el.scrollIntoView({ behavior: "smooth" });
-              }, 100);
+              if (typeof window !== "undefined") {
+                window.location.href = "/contribute";
+              }
             }}
           />
         </div>
@@ -875,7 +876,7 @@ function Pricing({ setPage }) {
   );
 }
 
-function PriceTier({ name, tagline, price, period, secondary, features, cta, featured, onCTA }) {
+function PriceTier({ name, tagline, price, period, secondary, badge, features, cta, featured, onCTA }) {
   return (
     <div style={{ ...styles.priceTier, ...(featured ? styles.priceTierFeatured : {}) }} className="axia-price-tier">
       {featured && <div style={styles.priceTierBadge}>Recommended</div>}
@@ -887,6 +888,7 @@ function PriceTier({ name, tagline, price, period, secondary, features, cta, fea
         <span style={styles.priceTierPrice} className="axia-price-tier-price">{price}</span>
         <span style={styles.priceTierPeriod}>{period}</span>
       </div>
+      {badge && <div style={styles.priceTierAnnualBadge}>{badge}</div>}
       {secondary && <div style={styles.priceTierSecondary}>{secondary}</div>}
       <div style={styles.priceTierDivider} />
       <ul style={styles.priceTierFeatures}>
@@ -2094,6 +2096,19 @@ const styles = {
     alignItems: "baseline",
     gap: 12,
     flexWrap: "wrap",
+  },
+  priceTierAnnualBadge: {
+    marginTop: 8,
+    background: "var(--clay)",
+    color: "var(--bone)",
+    fontFamily: "'JetBrains Mono', monospace",
+    fontSize: 11,
+    letterSpacing: "0.18em",
+    textTransform: "uppercase",
+    padding: "6px 10px",
+    borderRadius: 999,
+    display: "inline-flex",
+    alignItems: "center",
   },
   priceTierPrice: {
     fontFamily: "'Fraunces', serif",

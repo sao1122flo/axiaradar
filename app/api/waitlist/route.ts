@@ -17,6 +17,7 @@ const ALLOWED_SOURCES = new Set([
   "finalcta",
   "pricing",
   "landing",
+  "contribute",
 ]);
 
 const EMAIL_RE =
