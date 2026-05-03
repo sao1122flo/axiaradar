@@ -145,10 +145,42 @@ gtag('config', 'G-4YVEDRYTMH');`}
                   "mainEntity": [
                     {
                       "@type": "Question",
+                      "name": "Where do Ratebench's numbers come from?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Ratebench v1 derives every benchmark from public BLS OEWS (Occupational Employment and Wage Statistics) data through a documented freelance markup ladder. BLS publishes employee wage percentiles by occupation; Ratebench applies a transparent multiplier (1.4x at P25 → 2.7x at P90) to estimate freelance equivalents. Full methodology is published at ratebench.app/methodology. Real freelancer submissions replace these estimates as contributors join."
+                      }
+                    },
+                    {
+                      "@type": "Question",
+                      "name": "Why does BLS data alone not work for freelancers?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "BLS OEWS surveys W-2 employees only — it explicitly excludes self-employed workers and most independent contractors. For freelancers, BLS gives a useful floor (the wage equivalent of a full-time role) but understates real freelance rates because freelancers must cover benefits, employer payroll taxes, business overhead, downtime, and a profit margin. The Ratebench markup ladder estimates that gap; contributor submissions will eventually replace the model with measured freelance data."
+                      }
+                    },
+                    {
+                      "@type": "Question",
+                      "name": "How does Ratebench's markup ladder work?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "The Ratebench freelance markup ladder applies a different multiplier at each percentile of the BLS wage distribution. P25 (entry-level freelance) uses a 1.4x multiplier; P50 (median) uses 1.7x; P75 (proven freelancers) uses 2.1x; P90 (specialists with leverage) uses 2.7x. The ladder increases with percentile because pricing power scales with experience, reputation, and specialization. The model sits inside the 1.5x–3x range that Robert Half, Toptal, and Codementor consistently cite for freelance markup over equivalent W-2 wages."
+                      }
+                    },
+                    {
+                      "@type": "Question",
                       "name": "How do I know if I'm undercharging as a freelancer?",
                       "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Ratebench shows where your current rate sits in the percentile distribution for your skill and city. If you're below the P50 (median) for similar work, you're likely leaving money on the table. The recommended freelance range targets P55-P75, which is where most experienced mid-level professionals should land. Ratebench's transparent methodology helps you defend a higher rate with real market data."
+                        "text": "Find your skill and tier on Ratebench. If your current rate is below the P50 (median) for your tier, you may be leaving money on the table. The recommended freelance band is P50-P75, which is where most experienced practitioners with 3+ years of freelance reputation should land. P25 is typically entry-level or agency-mediated rates; P90+ requires specialty leverage. Note: v1 estimates are BLS-derived; contributor submissions will refine them."
+                      }
+                    },
+                    {
+                      "@type": "Question",
+                      "name": "Why is contributor data N=0 right now?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Ratebench launches as a methodology and a public commitment to build a real freelancer rate database — not as a finished product. The first 50–500 contributor submissions will validate (or correct) the BLS-derived estimates and unlock tier-specific medians, then MSA-level breakouts. Submitting your real rate via /contribute earns full Pro access while you contribute, no subscription required."
                       }
                     }
                   ]

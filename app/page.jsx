@@ -14,43 +14,103 @@ export default function RatebenchLanding() {
   const [submitted, setSubmitted] = useState(false);
   const [submittedMessage, setSubmittedMessage] = useState("");
   const [skill, setSkill] = useState("UX Designer");
-  const [city, setCity] = useState("Austin, TX");
+  const [city, setCity] = useState("National");
   const [tier, setTier] = useState("Mid");
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  // Sample benchmark data (illustrative)
+  // BLS-anchored benchmarks (v2) — derived from BLS OEWS May 2024 via Ratebench markup ladder
   const benchmarks = {
-    "UX Designer|Austin, TX|Mid": { p25: 68, p50: 88, p75: 115, p90: 145, sources: 23, freelance: [98, 130] },
-    "UX Designer|Austin, TX|Senior": { p25: 95, p50: 125, p75: 160, p90: 195, sources: 23, freelance: [135, 175] },
-    "UX Designer|Austin, TX|Junior": { p25: 42, p50: 58, p75: 72, p90: 88, sources: 23, freelance: [62, 80] },
-    "React Developer|San Francisco, CA|Mid": { p25: 95, p50: 125, p75: 165, p90: 210, sources: 41, freelance: [140, 185] },
-    "React Developer|San Francisco, CA|Senior": { p25: 130, p50: 175, p75: 230, p90: 290, sources: 41, freelance: [195, 260] },
-    "React Developer|San Francisco, CA|Junior": { p25: 65, p50: 85, p75: 110, p90: 140, sources: 41, freelance: [95, 125] },
-    "Brand Designer|New York, NY|Mid": { p25: 75, p50: 105, p75: 140, p90: 180, sources: 31, freelance: [115, 155] },
-    "Brand Designer|New York, NY|Senior": { p25: 110, p50: 150, p75: 195, p90: 250, sources: 31, freelance: [165, 220] },
-    "Brand Designer|New York, NY|Junior": { p25: 48, p50: 65, p75: 85, p90: 110, sources: 31, freelance: [72, 95] },
-    "Photographer|Los Angeles, CA|Mid": { p25: 85, p50: 120, p75: 165, p90: 220, sources: 18, freelance: [130, 180] },
-    "Photographer|Los Angeles, CA|Senior": { p25: 130, p50: 185, p75: 250, p90: 340, sources: 18, freelance: [200, 280] },
-    "Photographer|Los Angeles, CA|Junior": { p25: 55, p50: 75, p75: 100, p90: 130, sources: 18, freelance: [82, 110] },
-    "Copywriter|Brooklyn, NY|Mid": { p25: 65, p50: 90, p75: 120, p90: 155, sources: 27, freelance: [100, 135] },
-    "Copywriter|Brooklyn, NY|Senior": { p25: 95, p50: 130, p75: 170, p90: 215, sources: 27, freelance: [145, 190] },
-    "Copywriter|Brooklyn, NY|Junior": { p25: 40, p50: 55, p75: 72, p90: 92, sources: 27, freelance: [62, 82] },
+    "UX Designer|National|Junior": {
+      p25: 46, p50: 56, p75: 69, p90: 89,
+      sources: 0, freelance: [56, 69],
+      meta: { soc: "15-1255", blsP50: 47.16, tier: "Junior", vintage: "May 2024 (BLS)" },
+    },
+    "UX Designer|National|Mid": {
+      p25: 66, p50: 80, p75: 99, p90: 127,
+      sources: 0, freelance: [80, 99],
+      meta: { soc: "15-1255", blsP50: 47.16, tier: "Mid", vintage: "May 2024 (BLS)" },
+    },
+    "UX Designer|National|Senior": {
+      p25: 92, p50: 112, p75: 139, p90: 178,
+      sources: 0, freelance: [112, 139],
+      meta: { soc: "15-1255", blsP50: 47.16, tier: "Senior", vintage: "May 2024 (BLS)" },
+    },
+    "React Developer|National|Junior": {
+      p25: 63, p50: 76, p75: 94, p90: 121,
+      sources: 0, freelance: [76, 94],
+      meta: { soc: "15-1252", blsP50: 63.98, tier: "Junior", vintage: "May 2024 (BLS)" },
+    },
+    "React Developer|National|Mid": {
+      p25: 90, p50: 109, p75: 134, p90: 173,
+      sources: 0, freelance: [109, 134],
+      meta: { soc: "15-1252", blsP50: 63.98, tier: "Mid", vintage: "May 2024 (BLS)" },
+    },
+    "React Developer|National|Senior": {
+      p25: 125, p50: 152, p75: 188, p90: 242,
+      sources: 0, freelance: [152, 188],
+      meta: { soc: "15-1252", blsP50: 63.98, tier: "Senior", vintage: "May 2024 (BLS)" },
+    },
+    "Brand Designer|National|Junior": {
+      p25: 29, p50: 35, p75: 43, p90: 56,
+      sources: 0, freelance: [35, 43],
+      meta: { soc: "27-1024", blsP50: 29.47, tier: "Junior", vintage: "May 2024 (BLS)" },
+    },
+    "Brand Designer|National|Mid": {
+      p25: 41, p50: 50, p75: 62, p90: 80,
+      sources: 0, freelance: [50, 62],
+      meta: { soc: "27-1024", blsP50: 29.47, tier: "Mid", vintage: "May 2024 (BLS)" },
+    },
+    "Brand Designer|National|Senior": {
+      p25: 58, p50: 70, p75: 87, p90: 111,
+      sources: 0, freelance: [70, 87],
+      meta: { soc: "27-1024", blsP50: 29.47, tier: "Senior", vintage: "May 2024 (BLS)" },
+    },
+    "Photographer|National|Junior": {
+      p25: 20, p50: 24, p75: 30, p90: 39,
+      sources: 0, freelance: [24, 30],
+      meta: { soc: "27-4021", blsP50: 20.44, tier: "Junior", vintage: "May 2024 (BLS)" },
+    },
+    "Photographer|National|Mid": {
+      p25: 29, p50: 35, p75: 43, p90: 55,
+      sources: 0, freelance: [35, 43],
+      meta: { soc: "27-4021", blsP50: 20.44, tier: "Mid", vintage: "May 2024 (BLS)" },
+    },
+    "Photographer|National|Senior": {
+      p25: 40, p50: 49, p75: 60, p90: 77,
+      sources: 0, freelance: [49, 60],
+      meta: { soc: "27-4021", blsP50: 20.44, tier: "Senior", vintage: "May 2024 (BLS)" },
+    },
+    "Copywriter|National|Junior": {
+      p25: 34, p50: 41, p75: 51, p90: 66,
+      sources: 0, freelance: [41, 51],
+      meta: { soc: "27-3043", blsP50: 34.74, tier: "Junior", vintage: "May 2024 (BLS)" },
+    },
+    "Copywriter|National|Mid": {
+      p25: 49, p50: 59, p75: 73, p90: 94,
+      sources: 0, freelance: [59, 73],
+      meta: { soc: "27-3043", blsP50: 34.74, tier: "Mid", vintage: "May 2024 (BLS)" },
+    },
+    "Copywriter|National|Senior": {
+      p25: 68, p50: 83, p75: 102, p90: 131,
+      sources: 0, freelance: [83, 102],
+      meta: { soc: "27-3043", blsP50: 34.74, tier: "Senior", vintage: "May 2024 (BLS)" },
+    },
   };
 
   const skills = ["UX Designer", "React Developer", "Brand Designer", "Photographer", "Copywriter"];
   const citiesBySkill = {
-    "UX Designer": ["Austin, TX"],
-    "React Developer": ["San Francisco, CA"],
-    "Brand Designer": ["New York, NY"],
-    "Photographer": ["Los Angeles, CA"],
-    "Copywriter": ["Brooklyn, NY"],
+    "UX Designer": ["National"],
+    "React Developer": ["National"],
+    "Brand Designer": ["National"],
+    "Photographer": ["National"],
+    "Copywriter": ["National"],
   };
   const tiers = ["Junior", "Mid", "Senior"];
 
   const currentKey = `${skill}|${city}|${tier}`;
-  const data = benchmarks[currentKey] || benchmarks["UX Designer|Austin, TX|Mid"];
+  const data = benchmarks[currentKey] || benchmarks["UX Designer|National|Mid"];
 
   // When skill changes, reset city to first available
   useEffect(() => {
@@ -255,9 +315,10 @@ function Hero(props) {
         </h1>
 
         <p style={styles.heroLead}>
-          Ratebench shows the real market rate for independent designers,
-          developers, photographers, and writers — by city, by skill, by
-          experience level. Stop guessing. Stop leaving money behind.
+          The honest version of "what should I charge?"
+          <br />
+          We blend public BLS wage data with real freelancer submissions.
+          Day one: BLS only. Day 100: your data, too.
         </p>
 
         <div id="waitlist" style={styles.waitlistRow}>
@@ -342,12 +403,12 @@ function BenchmarkPreview({
       <div style={styles.sectionInner}>
         <SectionLabel num="01">Live benchmark</SectionLabel>
         <h2 style={styles.h2}>
-          Try it. <span style={styles.h2Italic}>This is real data.</span>
+          Try it. <span style={styles.h2Italic}>BLS-anchored data.</span>
         </h2>
         <p style={styles.sectionLead}>
-          Below is a working demonstration with sample percentiles drawn from
-          BLS OEWS and platform data. The product covers 830 occupations across
-          600+ US metropolitan areas.
+          Numbers below are derived from BLS OEWS public data through a
+          transparent markup formula. Real freelance submissions are how this
+          gets sharper. Be one of the first.
         </p>
 
         <div style={styles.demoCard}>
@@ -380,10 +441,7 @@ function BenchmarkPreview({
 
           <div style={styles.demoResults} className="axia-demo-results">
             <div style={styles.demoSourcesRow}>
-              <span style={styles.demoSourcesLabel}>SOURCES</span>
-              <span style={styles.demoSourcesValue}>
-                BLS OEWS · LinkedIn ranges · {data.sources} verified reports
-              </span>
+              <span style={styles.demoSourcesLabel}>DEMO DATA · BLS-ANCHORED · 0 CONTRIBUTORS YET</span>
             </div>
 
             {/* Percentile bar visualization */}
@@ -427,6 +485,23 @@ function BenchmarkPreview({
                 for similar quality.
               </div>
             </div>
+
+            <div style={{
+              marginTop: 16,
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: 10,
+              letterSpacing: "0.05em",
+              color: "rgba(31, 26, 22, 0.5)",
+              lineHeight: 1.5,
+              borderTop: "1px solid rgba(31, 26, 22, 0.08)",
+              paddingTop: 12,
+            }}>
+              SOURCE: BLS OEWS {data.meta.soc} · {data.meta.vintage} · Ratebench markup ladder
+              <br />
+              CONTRIBUTOR DATA: {data.sources} submission{data.sources === 1 ? "" : "s"} (this cell) ·{" "}
+              <a href="/methodology" style={{ color: "#C26A47", textDecoration: "underline" }}>methodology</a> ·{" "}
+              <a href="/contribute" style={{ color: "#C26A47", textDecoration: "underline" }}>add yours</a>
+            </div>
           </div>
 
           <div style={styles.demoFooter} className="axia-demo-footer">
@@ -434,7 +509,7 @@ function BenchmarkPreview({
               <span style={{ opacity: 0.5 }}>Last updated</span> May 2024 (BLS) ·{" "}
               <span style={{ opacity: 0.5 }}>Updated quarterly</span>
             </span>
-            <a style={styles.demoMethodologyLink}>Methodology →</a>
+            <a href="/methodology" style={styles.demoMethodologyLink}>Methodology →</a>
           </div>
         </div>
       </div>
