@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { benchmarks, skills, citiesBySkill, tiers } from "@/lib/benchmarks";
 
 // ============================================================
 // RATEBENCH — Freelance rate intelligence
@@ -19,95 +20,6 @@ export default function RatebenchLanding() {
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
-
-  // BLS-anchored benchmarks (v2) — derived from BLS OEWS May 2024 via Ratebench markup ladder
-  const benchmarks = {
-    "UX Designer|National|Junior": {
-      p25: 46, p50: 56, p75: 69, p90: 89,
-      sources: 0, freelance: [56, 69],
-      meta: { soc: "15-1255", blsP50: 47.16, tier: "Junior", vintage: "May 2024 (BLS)" },
-    },
-    "UX Designer|National|Mid": {
-      p25: 66, p50: 80, p75: 99, p90: 127,
-      sources: 0, freelance: [80, 99],
-      meta: { soc: "15-1255", blsP50: 47.16, tier: "Mid", vintage: "May 2024 (BLS)" },
-    },
-    "UX Designer|National|Senior": {
-      p25: 92, p50: 112, p75: 139, p90: 178,
-      sources: 0, freelance: [112, 139],
-      meta: { soc: "15-1255", blsP50: 47.16, tier: "Senior", vintage: "May 2024 (BLS)" },
-    },
-    "React Developer|National|Junior": {
-      p25: 63, p50: 76, p75: 94, p90: 121,
-      sources: 0, freelance: [76, 94],
-      meta: { soc: "15-1252", blsP50: 63.98, tier: "Junior", vintage: "May 2024 (BLS)" },
-    },
-    "React Developer|National|Mid": {
-      p25: 90, p50: 109, p75: 134, p90: 173,
-      sources: 0, freelance: [109, 134],
-      meta: { soc: "15-1252", blsP50: 63.98, tier: "Mid", vintage: "May 2024 (BLS)" },
-    },
-    "React Developer|National|Senior": {
-      p25: 125, p50: 152, p75: 188, p90: 242,
-      sources: 0, freelance: [152, 188],
-      meta: { soc: "15-1252", blsP50: 63.98, tier: "Senior", vintage: "May 2024 (BLS)" },
-    },
-    "Brand Designer|National|Junior": {
-      p25: 29, p50: 35, p75: 43, p90: 56,
-      sources: 0, freelance: [35, 43],
-      meta: { soc: "27-1024", blsP50: 29.47, tier: "Junior", vintage: "May 2024 (BLS)" },
-    },
-    "Brand Designer|National|Mid": {
-      p25: 41, p50: 50, p75: 62, p90: 80,
-      sources: 0, freelance: [50, 62],
-      meta: { soc: "27-1024", blsP50: 29.47, tier: "Mid", vintage: "May 2024 (BLS)" },
-    },
-    "Brand Designer|National|Senior": {
-      p25: 58, p50: 70, p75: 87, p90: 111,
-      sources: 0, freelance: [70, 87],
-      meta: { soc: "27-1024", blsP50: 29.47, tier: "Senior", vintage: "May 2024 (BLS)" },
-    },
-    "Photographer|National|Junior": {
-      p25: 20, p50: 24, p75: 30, p90: 39,
-      sources: 0, freelance: [24, 30],
-      meta: { soc: "27-4021", blsP50: 20.44, tier: "Junior", vintage: "May 2024 (BLS)" },
-    },
-    "Photographer|National|Mid": {
-      p25: 29, p50: 35, p75: 43, p90: 55,
-      sources: 0, freelance: [35, 43],
-      meta: { soc: "27-4021", blsP50: 20.44, tier: "Mid", vintage: "May 2024 (BLS)" },
-    },
-    "Photographer|National|Senior": {
-      p25: 40, p50: 49, p75: 60, p90: 77,
-      sources: 0, freelance: [49, 60],
-      meta: { soc: "27-4021", blsP50: 20.44, tier: "Senior", vintage: "May 2024 (BLS)" },
-    },
-    "Copywriter|National|Junior": {
-      p25: 34, p50: 41, p75: 51, p90: 66,
-      sources: 0, freelance: [41, 51],
-      meta: { soc: "27-3043", blsP50: 34.74, tier: "Junior", vintage: "May 2024 (BLS)" },
-    },
-    "Copywriter|National|Mid": {
-      p25: 49, p50: 59, p75: 73, p90: 94,
-      sources: 0, freelance: [59, 73],
-      meta: { soc: "27-3043", blsP50: 34.74, tier: "Mid", vintage: "May 2024 (BLS)" },
-    },
-    "Copywriter|National|Senior": {
-      p25: 68, p50: 83, p75: 102, p90: 131,
-      sources: 0, freelance: [83, 102],
-      meta: { soc: "27-3043", blsP50: 34.74, tier: "Senior", vintage: "May 2024 (BLS)" },
-    },
-  };
-
-  const skills = ["UX Designer", "React Developer", "Brand Designer", "Photographer", "Copywriter"];
-  const citiesBySkill = {
-    "UX Designer": ["National"],
-    "React Developer": ["National"],
-    "Brand Designer": ["National"],
-    "Photographer": ["National"],
-    "Copywriter": ["National"],
-  };
-  const tiers = ["Junior", "Mid", "Senior"];
 
   const currentKey = `${skill}|${city}|${tier}`;
   const data = benchmarks[currentKey] || benchmarks["UX Designer|National|Mid"];

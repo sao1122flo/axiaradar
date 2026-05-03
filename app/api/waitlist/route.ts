@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { getSupabaseAdmin } from "@/lib/supabase";
-import { getResend, getFromAddress, welcomeEmail } from "@/lib/resend";
+import { getResend, getFromAddress, welcomeEmail, contributorStepOneEmail } from "@/lib/resend";
 
 // Run on the Node.js runtime (we use `node:crypto` and the Resend SDK).
 export const runtime = "nodejs";
@@ -134,7 +134,8 @@ export async function POST(req: Request) {
   if (isNew) {
     try {
       const resend = getResend();
-      const { subject, html, text } = welcomeEmail();
+      const isContributor = source === "contribute";
+      const { subject, html, text } = isContributor ? contributorStepOneEmail() : welcomeEmail();
       const { error: sendError } = await resend.emails.send({
         from: getFromAddress(),
         to: email,
