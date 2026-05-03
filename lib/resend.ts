@@ -261,3 +261,68 @@ export function contributorWelcomeEmail(args: {
 
   return { subject, html, text };
 }
+
+/**
+ * Sent to contributors who submitted a rate for a skill without a
+ * BLS-anchored benchmark yet. Acknowledges the gap, promises follow-up.
+ */
+export function contributorWelcomeEmailNoBenchmark(args: {
+  skill: string;
+  tier: string;
+  rate: number;
+  rateUnit: string;
+}): { subject: string; html: string; text: string } {
+  const { skill, tier, rate, rateUnit } = args;
+  const subject = `Thanks for contributing — you're early in ${skill}`;
+
+  const text = [
+    `Thanks for sharing your rate: $${rate}/${rateUnit} for ${tier} ${skill}.`,
+    "",
+    "Heads up: we don't have a BLS-anchored benchmark for your category yet. That means we can't tell you which percentile you're in — yet.",
+    "",
+    "What that does mean: you're among the first contributors in your category. Once we have ≥5 submissions for your skill + tier, we'll send you the distribution and your position in it.",
+    "",
+    "Pro access is unlocked while you contribute. We'll email you when your category benchmark is live, and once a quarter to update your rate.",
+    "",
+    "— The Ratebench team · ratebench.app",
+  ].join("\n");
+
+  const html = `
+<!doctype html>
+<html lang="en">
+  <body style="margin:0;padding:0;background:#f7f2ea;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#1f1a16;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f7f2ea;">
+      <tr><td align="center" style="padding:48px 16px;">
+        <table role="presentation" width="560" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;width:100%;background:#ffffff;border:1px solid #e8e0d3;border-radius:4px;">
+          <tr><td style="padding:40px 40px 24px 40px;">
+            <div style="font-family:Georgia,serif;font-size:28px;font-weight:700;color:#1f1a16;">Ratebench<span style="color:#c26a47;">.</span></div>
+            <div style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#c26a47;margin-top:6px;">Early contributor</div>
+          </td></tr>
+          <tr><td style="padding:0 40px 16px 40px;">
+            <h1 style="margin:0 0 12px 0;font-size:22px;line-height:1.25;font-weight:600;color:#1f1a16;">You&apos;re early in ${skill}.</h1>
+            <p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:#3a322b;">
+              Thanks for sharing your rate: <strong>$${rate}/${rateUnit}</strong> for ${tier} ${skill}.
+            </p>
+            <p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:#3a322b;">
+              Heads up: we don&apos;t have a BLS-anchored benchmark for your category yet, so we can&apos;t tell you your percentile right now.
+            </p>
+            <p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:#3a322b;">
+              What that does mean: <strong>you&apos;re among the first contributors in your category</strong>. Once we have &ge;5 submissions for your skill + tier, we&apos;ll email you the distribution and your position in it.
+            </p>
+            <p style="margin:0 0 24px 0;font-size:14px;color:#5a4f44;">
+              Pro access is unlocked while you contribute. We&apos;ll email you when your category benchmark goes live, and once a quarter to update your rate.
+            </p>
+          </td></tr>
+          <tr><td style="padding:24px 40px 32px 40px;border-top:1px solid #e8e0d3;">
+            <p style="margin:0;font-family:'Courier New',monospace;font-size:11px;color:#8a7f72;">
+              &mdash; The Ratebench team &middot; <a href="https://ratebench.app" style="color:#c26a47;text-decoration:none;">ratebench.app</a>
+            </p>
+          </td></tr>
+        </table>
+      </td></tr>
+    </table>
+  </body>
+</html>`.trim();
+
+  return { subject, html, text };
+}

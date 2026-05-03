@@ -157,3 +157,93 @@ export function normalizeRateToHourly(amount: number, unit: string): number {
 export function getBenchmark(skill: string, tier: string): BenchmarkCell | null {
   return benchmarks[`${skill}|National|${tier}`] ?? null;
 }
+
+// =============================================================================
+// Full skill taxonomy — used by /contribute form and API validation.
+// =============================================================================
+
+export type SkillOption = {
+  label: string;
+  socCode: string;
+  hasBenchmark: boolean;
+};
+
+export const SKILL_GROUPS: Record<string, SkillOption[]> = {
+  "Design & Creative": [
+    { label: "UX Designer",                             socCode: "15-1255", hasBenchmark: true  },
+    { label: "UI Designer",                             socCode: "15-1255", hasBenchmark: false },
+    { label: "Product Designer",                        socCode: "15-1255", hasBenchmark: false },
+    { label: "UX Researcher",                           socCode: "15-1255", hasBenchmark: false },
+    { label: "Brand Designer",                          socCode: "27-1024", hasBenchmark: true  },
+    { label: "Graphic Designer",                        socCode: "27-1024", hasBenchmark: false },
+    { label: "Visual Designer",                         socCode: "27-1024", hasBenchmark: false },
+    { label: "Illustrator",                             socCode: "27-1013", hasBenchmark: false },
+    { label: "Motion Designer / Animator",              socCode: "27-1014", hasBenchmark: false },
+    { label: "Industrial / Product Designer (physical)",socCode: "27-1021", hasBenchmark: false },
+    { label: "Interior Designer",                       socCode: "27-1025", hasBenchmark: false },
+  ],
+  "Development & Engineering": [
+    { label: "React Developer",                         socCode: "15-1252", hasBenchmark: true  },
+    { label: "Frontend Developer (other)",              socCode: "15-1252", hasBenchmark: false },
+    { label: "Backend Developer",                       socCode: "15-1252", hasBenchmark: false },
+    { label: "Full-stack Developer",                    socCode: "15-1252", hasBenchmark: false },
+    { label: "Mobile Developer (iOS/Android)",          socCode: "15-1252", hasBenchmark: false },
+    { label: "WordPress / Webflow / Shopify Developer", socCode: "15-1252", hasBenchmark: false },
+    { label: "Data Scientist / ML Engineer",            socCode: "15-2051", hasBenchmark: false },
+    { label: "Data Engineer",                           socCode: "15-2051", hasBenchmark: false },
+    { label: "DevOps / SRE",                            socCode: "15-1244", hasBenchmark: false },
+    { label: "QA / Test Automation",                    socCode: "15-1253", hasBenchmark: false },
+    { label: "Cybersecurity / Pen Tester",              socCode: "15-1212", hasBenchmark: false },
+  ],
+  "Writing & Content": [
+    { label: "Copywriter",                              socCode: "27-3043", hasBenchmark: true  },
+    { label: "Content Writer / Blog Writer",            socCode: "27-3043", hasBenchmark: false },
+    { label: "Technical Writer",                        socCode: "27-3042", hasBenchmark: false },
+    { label: "Editor / Proofreader",                    socCode: "27-3041", hasBenchmark: false },
+    { label: "Ghostwriter",                             socCode: "27-3043", hasBenchmark: false },
+    { label: "Translator / Interpreter",                socCode: "27-3091", hasBenchmark: false },
+  ],
+  "Marketing & Strategy": [
+    { label: "Brand Strategist",                        socCode: "13-1161", hasBenchmark: false },
+    { label: "Marketing Strategist",                    socCode: "13-1161", hasBenchmark: false },
+    { label: "Growth Marketer",                         socCode: "13-1161", hasBenchmark: false },
+    { label: "SEO Specialist",                          socCode: "13-1161", hasBenchmark: false },
+    { label: "Performance / Paid Ads",                  socCode: "13-1161", hasBenchmark: false },
+    { label: "Social Media Manager",                    socCode: "13-1161", hasBenchmark: false },
+    { label: "Email Marketer",                          socCode: "13-1161", hasBenchmark: false },
+  ],
+  "Visual & Production": [
+    { label: "Photographer",                            socCode: "27-4021", hasBenchmark: true  },
+    { label: "Videographer / Video Editor",             socCode: "27-4032", hasBenchmark: false },
+    { label: "Cinematographer",                         socCode: "27-4031", hasBenchmark: false },
+    { label: "Voice-Over Artist",                       socCode: "27-2012", hasBenchmark: false },
+    { label: "Audio / Sound Engineer",                  socCode: "27-4014", hasBenchmark: false },
+  ],
+  "Business & Operations": [
+    { label: "Business / Operations Consultant",        socCode: "13-1111", hasBenchmark: false },
+    { label: "Project Manager",                         socCode: "13-1082", hasBenchmark: false },
+    { label: "Product Manager",                         socCode: "11-2021", hasBenchmark: false },
+    { label: "Virtual / Executive Assistant",           socCode: "43-6011", hasBenchmark: false },
+  ],
+};
+
+/** Flat list of all valid skill labels (for server-side validation). */
+export const ALL_SKILL_LABELS: string[] = Object.values(SKILL_GROUPS).flat().map(s => s.label);
+
+/** Look up SOC code by skill label. Returns null for unknown or custom labels. */
+export function socCodeForSkill(label: string): string | null {
+  for (const group of Object.values(SKILL_GROUPS)) {
+    const hit = group.find(s => s.label === label);
+    if (hit) return hit.socCode;
+  }
+  return null;
+}
+
+/** True if this skill has a BLS-anchored benchmark cell available. */
+export function hasBenchmark(label: string): boolean {
+  for (const group of Object.values(SKILL_GROUPS)) {
+    const hit = group.find(s => s.label === label);
+    if (hit) return hit.hasBenchmark;
+  }
+  return false;
+}

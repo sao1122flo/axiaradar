@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 import type { BenchmarkCell } from "@/lib/benchmarks";
+import { SKILL_GROUPS } from "@/lib/benchmarks";
 
-const SKILLS = ["UX Designer", "React Developer", "Brand Designer", "Photographer", "Copywriter"] as const;
 const TIERS = ["Junior", "Mid", "Senior"] as const;
 
 type Step = "email" | "rate" | "done";
@@ -26,7 +26,8 @@ export default function ContributePage() {
   const [error, setError] = useState("");
 
   // Step 2 fields
-  const [skill, setSkill] = useState<string>("UX Designer");
+  const [skill, setSkill] = useState<string>("");
+  const [skillCustom, setSkillCustom] = useState("");
   const [city, setCity] = useState("National");
   const [customCity, setCustomCity] = useState("");
   const [tier, setTier] = useState<Tier>("Mid");
@@ -72,6 +73,11 @@ export default function ContributePage() {
 
   const handleRateSubmit = async () => {
     setError("");
+    const skillToSend = skill === "__other__" ? skillCustom.trim() : skill;
+    if (!skillToSend || skillToSend.length < 1) {
+      setError("Please select or specify your skill.");
+      return;
+    }
     const rate = parseFloat(rateAmount);
     if (!rateAmount || isNaN(rate) || rate <= 0) {
       setError("Please enter a valid rate.");
@@ -85,7 +91,7 @@ export default function ContributePage() {
     const resolvedCity = city === "Other" ? (customCity.trim() || "Other") : city;
     const payload = {
       email,
-      skill,
+      skill: skillToSend,
       city: resolvedCity,
       experience_tier: tier,
       rate_amount: rate,
@@ -201,12 +207,39 @@ export default function ContributePage() {
                     <label style={styles.label}>Skill</label>
                     <select
                       value={skill}
-                      onChange={(e) => setSkill(e.target.value)}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        setSkill(v);
+                        if (v !== "__other__") setSkillCustom("");
+                      }}
+                      required
                       style={styles.select}
                       className="axia-demo-select"
                     >
-                      {SKILLS.map((s) => <option key={s} value={s}>{s}</option>)}
+                      <option value="" disabled>What do you freelance as?</option>
+                      {Object.entries(SKILL_GROUPS).map(([groupName, options]) => (
+                        <optgroup key={groupName} label={groupName}>
+                          {options.map(opt => (
+                            <option key={opt.label} value={opt.label}>{opt.label}</option>
+                          ))}
+                        </optgroup>
+                      ))}
+                      <optgroup label="—">
+                        <option value="__other__">Other (specify)</option>
+                      </optgroup>
                     </select>
+                    {skill === "__other__" && (
+                      <input
+                        type="text"
+                        value={skillCustom}
+                        onChange={(e) => setSkillCustom(e.target.value)}
+                        placeholder="What's your freelance specialty?"
+                        maxLength={80}
+                        required
+                        style={{ ...styles.input, marginTop: 8 }}
+                        className="axia-waitlist-input"
+                      />
+                    )}
                   </div>
                   <div style={styles.fieldWrap}>
                     <label style={styles.label}>Experience tier</label>
@@ -424,11 +457,14 @@ export default function ContributePage() {
                   )}
                 </>
               ) : (
-                <div style={{ marginBottom: 24 }}>
-                  <h1 style={styles.h1}>Rate submitted.</h1>
-                  <p style={styles.lead}>
-                    Your rate has been recorded. Percentile data will be available once we have
-                    more contributors in your skill + tier combination.
+                <div style={styles.earlyHero}>
+                  <div style={styles.percentileLabel}>EARLY CONTRIBUTOR</div>
+                  <h1 style={{ ...styles.h1, color: "#F7F2EA", margin: "0 0 12px 0" }}>
+                    You&apos;re early in {skill === "__other__" ? skillCustom : skill}.
+                  </h1>
+                  <p style={{ ...styles.lead, color: "rgba(247,242,234,0.75)", margin: 0 }}>
+                    No benchmark for your category yet — once we have ≥5 submissions in your skill + tier,
+                    we&apos;ll email you the distribution and your position in it.
                   </p>
                 </div>
               )}
@@ -626,6 +662,13 @@ const styles: Record<string, React.CSSProperties> = {
     padding: 0,
   },
   percentileHero: {
+    background: "#1F1A16",
+    color: "#F7F2EA",
+    borderRadius: 12,
+    padding: "32px 28px",
+    marginBottom: 16,
+  },
+  earlyHero: {
     background: "#1F1A16",
     color: "#F7F2EA",
     borderRadius: 12,

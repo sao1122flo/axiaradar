@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase";
-import { getResend, getFromAddress, contributorWelcomeEmail } from "@/lib/resend";
-import { getBenchmark, computePercentile, normalizeRateToHourly } from "@/lib/benchmarks";
+import { getResend, getFromAddress, contributorWelcomeEmail, contributorWelcomeEmailNoBenchmark } from "@/lib/resend";
+import { ALL_SKILL_LABELS, hasBenchmark, socCodeForSkill, getBenchmark, computePercentile, normalizeRateToHourly } from "@/lib/benchmarks";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const EMAIL_RE = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-const ALLOWED_SKILLS = new Set(["UX Designer", "React Developer", "Brand Designer", "Photographer", "Copywriter"]);
 const ALLOWED_TIERS = new Set(["Junior", "Mid", "Senior"]);
 const ALLOWED_UNITS = new Set(["hourly", "daily", "project", "retainer"]);
 const ALLOWED_TYPES = new Set(["current", "last_engagement", "aspirational"]);
@@ -26,9 +25,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid email." }, { status: 400 });
   }
 
-  const skill = typeof body.skill === "string" ? body.skill : "";
-  if (!ALLOWED_SKILLS.has(skill)) {
-    return NextResponse.json({ error: "Invalid skill." }, { status: 400 });
+  const skill = typeof body.skill === "string" ? body.skill.trim() : "";
+  const isKnownSkill = ALL_SKILL_LABELS.includes(skill);
+  const isValidCustomSkill = !isKnownSkill && skill.length >= 3 && skill.length <= 80 && /^[A-Za-z0-9 \-/&.,()]+$/.test(skill);
+  if (!isKnownSkill && !isValidCustomSkill) {
+    return NextResponse.json({ error: "Skill must be from the list or a valid free-text specialty (3-80 chars)." }, { status: 400 });
   }
 
   const tier = typeof body.experience_tier === "string" ? body.experience_tier : "";
@@ -60,10 +61,16 @@ export async function POST(req: Request) {
   const linkedinUrl = typeof body.linkedin_url === "string" ? body.linkedin_url.slice(0, 500) : null;
   const notes = typeof body.notes === "string" ? body.notes.slice(0, 1000) : null;
 
-  // Compute percentile
-  const cell = getBenchmark(skill, tier);
-  const hourlyEquivalent = normalizeRateToHourly(rateAmount, rateUnit);
-  const percentile = cell ? computePercentile(hourlyEquivalent, cell) : null;
+  // Compute percentile — only for skills with a BLS-anchored benchmark
+  let percentile: number | null = null;
+  let cell = null;
+  if (hasBenchmark(skill)) {
+    cell = getBenchmark(skill, tier);
+    if (cell) {
+      const hourlyEquivalent = normalizeRateToHourly(rateAmount, rateUnit);
+      percentile = computePercentile(hourlyEquivalent, cell);
+    }
+  }
 
   // Persist to Supabase
   try {
@@ -71,6 +78,7 @@ export async function POST(req: Request) {
     const { error } = await supabase.from("rate_submissions").insert({
       contributor_email: emailRaw,
       skill,
+      bls_soc_code: socCodeForSkill(skill),
       city,
       experience_tier: tier,
       rate_amount: rateAmount,
@@ -93,9 +101,10 @@ export async function POST(req: Request) {
   }
 
   // Send insight email (non-blocking — don't fail the response on email errors)
-  if (cell && percentile != null) {
-    try {
-      const resend = getResend();
+  try {
+    const resend = getResend();
+    if (cell && percentile != null) {
+      const hourlyEquivalent = normalizeRateToHourly(rateAmount, rateUnit);
       const { subject, html, text } = contributorWelcomeEmail({
         skill,
         tier,
@@ -107,10 +116,18 @@ export async function POST(req: Request) {
         cell,
       });
       await resend.emails.send({ from: getFromAddress(), to: emailRaw, subject, html, text });
-    } catch (err) {
-      console.error("[contribute/submit] email failed:", err);
+    } else {
+      const { subject, html, text } = contributorWelcomeEmailNoBenchmark({
+        skill,
+        tier,
+        rate: rateAmount,
+        rateUnit,
+      });
+      await resend.emails.send({ from: getFromAddress(), to: emailRaw, subject, html, text });
     }
+  } catch (err) {
+    console.error("[contribute/submit] email failed:", err);
   }
 
-  return NextResponse.json({ ok: true, percentile, cell });
+  return NextResponse.json({ ok: true, percentile, cell, hasBenchmark: percentile != null });
 }
