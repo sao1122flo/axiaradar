@@ -1,26 +1,52 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://axiaradar.com";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://ratebench.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Axia — Freelance rate intelligence",
+  title: "Ratebench — Charge what you're worth, not less",
   description:
-    "What clients actually pay independent designers, developers, photographers, and writers — by city, by skill, by experience level.",
+    "Real market data on what clients pay independent designers, developers, photographers, and writers — by city, by skill, by experience level. Stop guessing. Stop leaving money behind.",
+  keywords: [
+    "freelance rates",
+    "freelance rate intelligence",
+    "hourly rate",
+    "contract rates",
+    "BLS OEWS",
+    "UX designer rates",
+    "developer rates",
+    "photographer rates",
+    "copywriter rates",
+    "stop undercharging",
+  ],
+  authors: [{ name: "Ratebench" }],
+  creator: "Ratebench",
+  publisher: "Ratebench",
   openGraph: {
-    title: "Axia — Freelance rate intelligence",
+    title: "Ratebench — Charge what you're worth, not less",
     description:
-      "Real market data on what clients pay independent professionals.",
+      "Real market data on what clients pay independent designers, developers, photographers, and writers — by city, by skill, by experience level. Stop guessing. Stop leaving money behind.",
     url: SITE_URL,
-    siteName: "Axia",
+    siteName: "Ratebench",
     type: "website",
+    images: [
+      {
+        url: `${SITE_URL}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: "Ratebench — Freelance rate intelligence",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Axia — Freelance rate intelligence",
+    title: "Ratebench — Charge what you're worth, not less",
     description:
-      "What clients actually pay. Not a calculator. The actual percentiles.",
+      "Real market data on what clients pay. Stop guessing. Stop leaving money behind.",
+  },
+  alternates: {
+    canonical: SITE_URL,
   },
   icons: {
     icon: "/favicon.svg",
@@ -43,7 +69,7 @@ export default function RootLayout({
       <head>
         <script
           async
-          src="https://www.googletagmanager.com/gtag/js?id=G-WFT3Z7DFLY"
+          src="https://www.googletagmanager.com/gtag/js?id=G-4YVEDRYTMH"
         />
         <script
           dangerouslySetInnerHTML={{
@@ -51,7 +77,7 @@ export default function RootLayout({
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 
-gtag('config', 'G-WFT3Z7DFLY');`,
+gtag('config', 'G-4YVEDRYTMH');`,
           }}
         />
         <script
@@ -62,10 +88,11 @@ gtag('config', 'G-WFT3Z7DFLY');`,
               "@graph": [
                 {
                   "@type": "Organization",
-                  "@id": "https://axiaradar.com/#organization",
-                  "name": "Axia",
-                  "url": "https://axiaradar.com",
-                  "description": "Freelance rate intelligence — real market data on what clients pay independent designers, developers, photographers, copywriters, and brand designers.",
+                  "@id": "https://ratebench.app/#organization",
+                  "name": "Ratebench",
+                  "url": "https://ratebench.app",
+                  "logo": "https://ratebench.app/icon.png",
+                  "description": "Freelance rate intelligence for independent professionals. Real market percentile data sourced from BLS, job listings, and verified freelancer reports. Charge what you're worth, not less.",
                   "founder": {
                     "@type": "Person",
                     "name": "Sergio Ordonez",
@@ -73,35 +100,39 @@ gtag('config', 'G-WFT3Z7DFLY');`,
                     "sameAs": ["https://x.com/Sergioordonez22"]
                   },
                   "foundingDate": "2026",
-                  "knowsAbout": ["freelance rates", "pricing transparency", "labor market data", "BLS OEWS", "rate benchmarks"]
+                  "knowsAbout": ["freelance rates", "pricing transparency", "labor market data", "BLS OEWS", "rate benchmarks"],
+                  "sameAs": [
+                    "https://twitter.com/ratebench",
+                    "https://linkedin.com/company/ratebench"
+                  ]
                 },
                 {
                   "@type": "WebSite",
-                  "@id": "https://axiaradar.com/#website",
-                  "url": "https://axiaradar.com",
-                  "name": "Axia",
-                  "description": "Freelance rate intelligence",
-                  "publisher": { "@id": "https://axiaradar.com/#organization" },
+                  "@id": "https://ratebench.app/#website",
+                  "url": "https://ratebench.app",
+                  "name": "Ratebench",
+                  "description": "Real market data on what clients pay independent designers, developers, photographers, and writers — by city, by skill, by experience level. Stop guessing. Stop leaving money behind.",
+                  "publisher": { "@id": "https://ratebench.app/#organization" },
                   "inLanguage": "en-US"
                 },
                 {
                   "@type": "Dataset",
-                  "@id": "https://axiaradar.com/#dataset",
-                  "name": "Axia Freelance Rate Benchmarks",
+                  "@id": "https://ratebench.app/#dataset",
+                  "name": "Ratebench Freelance Rate Benchmarks",
                   "description": "Percentile-based freelance rate data (P25/P50/P75/P90) for major freelance occupations across US metropolitan areas. Blends BLS OEWS, scraped job listings, and contributor-submitted real rates.",
-                  "url": "https://axiaradar.com",
-                  "creator": { "@id": "https://axiaradar.com/#organization" },
-                  "license": "https://axiaradar.com/terms",
+                  "url": "https://ratebench.app",
+                  "creator": { "@id": "https://ratebench.app/#organization" },
+                  "license": "https://ratebench.app/terms",
                   "keywords": "freelance rates, hourly rates, contract rates, UX designer rates, developer rates, photographer rates, copywriter rates, brand designer rates",
                   "spatialCoverage": "United States",
                   "temporalCoverage": "2024/.."
                 },
                 {
                   "@type": "Product",
-                  "@id": "https://axiaradar.com/#product",
-                  "name": "Axia Pro",
+                  "@id": "https://ratebench.app/#product",
+                  "name": "Ratebench Pro",
                   "description": "Full distribution access to freelance rate benchmarks. Unlimited queries, quarterly trend alerts, PDF reports, historical trends.",
-                  "brand": { "@id": "https://axiaradar.com/#organization" },
+                  "brand": { "@id": "https://ratebench.app/#organization" },
                   "offers": {
                     "@type": "AggregateOffer",
                     "priceCurrency": "USD",
@@ -109,6 +140,20 @@ gtag('config', 'G-WFT3Z7DFLY');`,
                     "highPrice": "9",
                     "offerCount": "3"
                   }
+                },
+                {
+                  "@type": "FAQPage",
+                  "@id": "https://ratebench.app/#faq",
+                  "mainEntity": [
+                    {
+                      "@type": "Question",
+                      "name": "How do I know if I'm undercharging as a freelancer?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Ratebench shows where your current rate sits in the percentile distribution for your skill and city. If you're below the P50 (median) for similar work, you're likely leaving money on the table. The recommended freelance range targets P55-P75, which is where most experienced mid-level professionals should land. Ratebench's transparent methodology helps you defend a higher rate with real market data."
+                      }
+                    }
+                  ]
                 }
               ]
             })

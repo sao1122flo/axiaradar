@@ -47,7 +47,7 @@ function clientIp(req: Request): string {
 }
 
 function hashIp(ip: string): string | null {
-  const secret = process.env.AXIA_WAITLIST_SECRET;
+  const secret = process.env.RATEBENCH_WAITLIST_SECRET;
   if (!secret) return null;
   return crypto.createHmac("sha256", secret).update(ip).digest("hex");
 }

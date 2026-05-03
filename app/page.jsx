@@ -3,12 +3,12 @@
 import React, { useState, useEffect } from "react";
 
 // ============================================================
-// AXIA — Freelance rate intelligence
+// RATEBENCH — Freelance rate intelligence
 // Direction 2: New Elegant (terracotta + cream + editorial)
 // Single-file artifact. Self-contained.
 // ============================================================
 
-export default function AxiaLanding() {
+export default function RatebenchLanding() {
   const [page, setPage] = useState("home"); // home | about | pricing
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -164,9 +164,9 @@ function Nav({ page, setPage }) {
           onClick={() => setPage("home")}
           style={styles.wordmark}
           className="axia-wordmark"
-          aria-label="Axia home"
+          aria-label="Ratebench home"
         >
-          Axia
+          Ratebench
           <span style={styles.wordmarkDot}>.</span>
         </button>
         <div style={styles.navLinks} className="axia-nav-links">
@@ -249,17 +249,15 @@ function Hero(props) {
         </div>
 
         <h1 style={styles.h1}>
-          What your work is
+          Charge what you're worth.
           <br />
-          <span style={styles.h1Italic}>actually </span>
-          worth.
+          <span style={styles.h1Italic}>Not less.</span>
         </h1>
 
         <p style={styles.heroLead}>
-          Axia is freelance rate intelligence — real market data on what clients
-          pay independent designers, developers, photographers, and writers, by
-          city, by skill, by experience level. Not a calculator. Not an average.
-          The actual percentiles.
+          Ratebench shows the real market rate for independent designers,
+          developers, photographers, and writers — by city, by skill, by
+          experience level. Stop guessing. Stop leaving money behind.
         </p>
 
         <div id="waitlist" style={styles.waitlistRow}>
@@ -625,14 +623,14 @@ function SocialProof() {
           <div style={styles.pullQuoteMark} className="axia-pull-quote-mark">"</div>
           <p style={styles.pullQuote} className="axia-pull-quote">
             Most freelance rate calculators ask{" "}
-            <span style={styles.pullQuoteEm}>what you want to earn</span>. Axia
+            <span style={styles.pullQuoteEm}>what you want to earn</span>. Ratebench
             asks{" "}
             <span style={styles.pullQuoteEm}>what the market actually pays</span>
             . That's the difference between hoping and knowing.
           </p>
           <div style={styles.pullQuoteAttr}>
             <div style={styles.pullQuoteName}>Editorial note</div>
-            <div style={styles.pullQuoteRole}>From the Axia methodology</div>
+            <div style={styles.pullQuoteRole}>From the Ratebench methodology</div>
           </div>
         </div>
       </div>
@@ -706,7 +704,7 @@ function About() {
       <article style={styles.aboutInner}>
         <SectionLabel num="—">About</SectionLabel>
         <h1 style={styles.aboutH1} className="axia-about-h1">
-          We built Axia because{" "}
+          We built Ratebench because{" "}
           <span style={styles.h1Italic}>the freelance rate question never had a real answer.</span>
         </h1>
 
@@ -725,7 +723,7 @@ function About() {
             different t-shirt.
           </p>
           <p style={styles.aboutP} className="axia-about-p">
-            We started Axia to answer the harder question: what are clients
+            We started Ratebench to answer the harder question: what are clients
             actually paying for design, development, photography, and writing
             work — in your city, at your level, this quarter?
           </p>
@@ -775,7 +773,7 @@ function About() {
         </div>
 
         <div style={styles.aboutSig}>
-          <div style={styles.aboutSigName}>The Axia team</div>
+          <div style={styles.aboutSigName}>The Ratebench team</div>
           <div style={styles.aboutSigMeta}>April 2026 · Issue 001</div>
         </div>
       </article>
@@ -933,7 +931,7 @@ function Footer(props) {
       <div style={styles.footerInner}>
         <div style={styles.footerTopRow} className="axia-footer-top-row">
           <div style={styles.footerWordmark} className="axia-footer-wordmark">
-            Axia<span style={styles.wordmarkDot}>.</span>
+            Ratebench<span style={styles.wordmarkDot}>.</span>
           </div>
           <div style={styles.footerColophon} className="axia-footer-colophon">
             Freelance rate intelligence
@@ -999,7 +997,7 @@ function Footer(props) {
         </div>
 
         <div style={styles.footerBottom} className="axia-footer-bottom">
-          <span>© 2026 Axia · Made for independent professionals.</span>
+          <span>© 2026 Ratebench · Made for independent professionals.</span>
           <span style={styles.footerBottomMeta}>v0.1 · Private beta</span>
         </div>
       </div>

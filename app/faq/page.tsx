@@ -1,52 +1,52 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "FAQ — Freelance Rate Benchmarks | Axia",
+  title: "FAQ — Freelance Rate Benchmarks | Ratebench",
   description:
-    "Common questions about freelance pricing methodology, percentile data, and how Axia rate benchmarks are built from BLS OEWS and contributor submissions.",
+    "Common questions about freelance pricing methodology, percentile data, and how Ratebench rate benchmarks are built from BLS OEWS and contributor submissions.",
 };
 
 const faqs = [
   {
     question: "How much should a freelance UX designer charge in 2026?",
     answer:
-      "Median rates for a mid-level UX designer in major US metros range from $80 to $130 per hour, with senior practitioners commanding $130–$200+. Axia data shows the Austin TX market at $88/hr P50 for mid-level and $125/hr P50 for senior. San Francisco runs 20–30% above Austin for equivalent roles. Rates vary most by city and client type — startup budgets, agency middleman cuts, and enterprise procurement processes each pull the effective rate in different directions.",
+      "Median rates for a mid-level UX designer in major US metros range from $80 to $130 per hour, with senior practitioners commanding $130–$200+. Ratebench data shows the Austin TX market at $88/hr P50 for mid-level and $125/hr P50 for senior. San Francisco runs 20–30% above Austin for equivalent roles. Rates vary most by city and client type — startup budgets, agency middleman cuts, and enterprise procurement processes each pull the effective rate in different directions.",
   },
   {
     question: "What's the typical rate range for a senior React developer in the US?",
     answer:
-      "Senior React developers in San Francisco land between $175–$230/hr at the P50–P75 range based on Axia benchmark data (41 verified reports). The P25 floor is $130/hr and the P90 ceiling is $290/hr. Remote work has compressed some geographic premiums, but San Francisco, New York, and Seattle still command 15–25% above mid-tier markets. Freelance rates for developers should account for self-employment tax (15.3%), benefits overhead, and ~70% billable utilization — which is why the freelance P50 sits 35–45% above equivalent W-2 wages.",
+      "Senior React developers in San Francisco land between $175–$230/hr at the P50–P75 range based on Ratebench benchmark data (41 verified reports). The P25 floor is $130/hr and the P90 ceiling is $290/hr. Remote work has compressed some geographic premiums, but San Francisco, New York, and Seattle still command 15–25% above mid-tier markets. Freelance rates for developers should account for self-employment tax (15.3%), benefits overhead, and ~70% billable utilization — which is why the freelance P50 sits 35–45% above equivalent W-2 wages.",
   },
   {
     question: "Are BLS occupational wage statistics useful for freelancers?",
     answer:
-      "Yes, but only as a floor. The Bureau of Labor Statistics Occupational Employment and Wage Statistics (OEWS) program publishes percentile wages for 830 occupations across 600+ metropolitan areas — it is the most granular, nationally representative labor market dataset that exists. The limitation is that BLS measures W-2 employees, not independent contractors. Axia applies transparent multipliers to convert BLS wages into defensible freelance equivalents: self-employment tax (15.3%), benefits gap (typically 20–30% of comp), and a utilization discount for non-billable hours (assuming 70% billable). The result is a statistical anchor, not a ceiling.",
+      "Yes, but only as a floor. The Bureau of Labor Statistics Occupational Employment and Wage Statistics (OEWS) program publishes percentile wages for 830 occupations across 600+ metropolitan areas — it is the most granular, nationally representative labor market dataset that exists. The limitation is that BLS measures W-2 employees, not independent contractors. Ratebench applies transparent multipliers to convert BLS wages into defensible freelance equivalents: self-employment tax (15.3%), benefits gap (typically 20–30% of comp), and a utilization discount for non-billable hours (assuming 70% billable). The result is a statistical anchor, not a ceiling.",
   },
   {
     question: "What's the difference between P25, P50, P75, and P90 freelance rates?",
     answer:
-      "Percentiles describe the distribution of rates across the market, not averages. P25 means 25% of the market charges below that number — it is the bottom quartile, typically newer practitioners or under-priced markets. P50 is the median: half the market is above, half below. P75 is the top quartile, where experienced practitioners with strong portfolios tend to land. P90 is the top 10% — specialized experts, niche skills, or premium positioning. Axia always shows all four so you can see the full shape of the market rather than a single misleading average.",
+      "Percentiles describe the distribution of rates across the market, not averages. P25 means 25% of the market charges below that number — it is the bottom quartile, typically newer practitioners or under-priced markets. P50 is the median: half the market is above, half below. P75 is the top quartile, where experienced practitioners with strong portfolios tend to land. P90 is the top 10% — specialized experts, niche skills, or premium positioning. Ratebench always shows all four so you can see the full shape of the market rather than a single misleading average.",
   },
   {
     question:
-      "How is Axia data different from rate calculators like SoloGig or Freelancer rate guides?",
+      "How is Ratebench data different from rate calculators like SoloGig or Freelancer rate guides?",
     answer:
-      "Most freelance rate calculators ask what you want to earn, apply a utilization formula, and output a 'recommended' rate. That is not market data — it is a budget calculation. Axia starts from what clients actually pay: BLS OEWS for the statistical anchor, public job listing salary ranges (mandatory in 12 states) for live market signal, and contributor-submitted real rates for ground-truth fidelity. Sample sizes are always shown. Confidence intervals are explicit. When a cell has only 7 reports, you see 7, not a smoothed number pretending to be more certain than it is.",
+      "Most freelance rate calculators ask what you want to earn, apply a utilization formula, and output a 'recommended' rate. That is not market data — it is a budget calculation. Ratebench starts from what clients actually pay: BLS OEWS for the statistical anchor, public job listing salary ranges (mandatory in 12 states) for live market signal, and contributor-submitted real rates for ground-truth fidelity. Sample sizes are always shown. Confidence intervals are explicit. When a cell has only 7 reports, you see 7, not a smoothed number pretending to be more certain than it is.",
   },
   {
     question: "What's a fair freelance markup over employee salary?",
     answer:
-      "A common rule of thumb is 1.5–2.5x your target equivalent W-2 salary, converted to an hourly rate. The math: a $120,000/yr salary is roughly $58/hr at 2,080 hours/year. A freelancer targeting the same take-home needs to cover self-employment tax (~15.3%), health insurance ($300–600/mo), retirement contributions (20% of net if maxing a SEP-IRA), and non-billable overhead (business development, admin, downtime between projects). At 70% billable utilization, the actual working hours drop to ~1,450/year, pushing the required rate to $120–$140/hr for equivalent net income. Axia's freelance recommendation range is calculated using these transparent multipliers.",
+      "A common rule of thumb is 1.5–2.5x your target equivalent W-2 salary, converted to an hourly rate. The math: a $120,000/yr salary is roughly $58/hr at 2,080 hours/year. A freelancer targeting the same take-home needs to cover self-employment tax (~15.3%), health insurance ($300–600/mo), retirement contributions (20% of net if maxing a SEP-IRA), and non-billable overhead (business development, admin, downtime between projects). At 70% billable utilization, the actual working hours drop to ~1,450/year, pushing the required rate to $120–$140/hr for equivalent net income. Ratebench's freelance recommendation range is calculated using these transparent multipliers.",
   },
   {
     question: "Should I price hourly, daily, or by project?",
     answer:
-      "Each model optimizes for different things. Hourly protects you from scope creep but caps upside and signals commodity work. Daily rates (common in Europe and with agency clients) smooth out the hourly tracking overhead while preserving flexibility. Project pricing rewards efficiency — if you can deliver in 20 hours what others take 40, you capture that margin. Senior practitioners typically move toward project or retainer pricing to decouple income from time. Axia publishes hourly benchmarks because they are the most comparable across markets, but the methodology page notes how to translate to daily and project equivalents.",
+      "Each model optimizes for different things. Hourly protects you from scope creep but caps upside and signals commodity work. Daily rates (common in Europe and with agency clients) smooth out the hourly tracking overhead while preserving flexibility. Project pricing rewards efficiency — if you can deliver in 20 hours what others take 40, you capture that margin. Senior practitioners typically move toward project or retainer pricing to decouple income from time. Ratebench publishes hourly benchmarks because they are the most comparable across markets, but the methodology page notes how to translate to daily and project equivalents.",
   },
   {
     question: "How often should I raise my freelance rates?",
     answer:
-      "At minimum, annually — US inflation averaged 3–4% in 2023–2025, which means a flat rate is a real pay cut every year. A stronger signal for a rate increase: your close rate is above 70% (demand exceeds supply at your current price), you have a waitlist, or you have significantly upgraded your skill set or portfolio tier. Axia tracks quarterly rate trends by market — in fast-moving categories like AI engineering and motion design, market rates have shifted 10–20% within a single year. The practical floor for most established freelancers is an annual CPI adjustment plus a skills premium review every 18 months.",
+      "At minimum, annually — US inflation averaged 3–4% in 2023–2025, which means a flat rate is a real pay cut every year. A stronger signal for a rate increase: your close rate is above 70% (demand exceeds supply at your current price), you have a waitlist, or you have significantly upgraded your skill set or portfolio tier. Ratebench tracks quarterly rate trends by market — in fast-moving categories like AI engineering and motion design, market rates have shifted 10–20% within a single year. The practical floor for most established freelancers is an annual CPI adjustment plus a skills premium review every 18 months.",
   },
 ];
 
@@ -74,7 +74,7 @@ export default function FAQPage() {
         <nav style={styles.nav}>
           <div style={styles.navInner}>
             <a href="/" style={styles.wordmark}>
-              Axia<span style={styles.wordmarkDot}>.</span>
+              Ratebench<span style={styles.wordmarkDot}>.</span>
             </a>
             <a href="/" style={styles.backLink}>
               ← Back to index

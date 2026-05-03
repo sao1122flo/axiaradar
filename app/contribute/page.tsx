@@ -57,7 +57,7 @@ export default function ContributePage() {
       <style dangerouslySetInnerHTML={{ __html: globalCSS }} />
       <header style={styles.header}>
         <a href="/" style={styles.wordmark} className="axia-wordmark">
-          Axia
+          Ratebench
           <span style={styles.wordmarkDot}>.</span>
         </a>
       </header>
@@ -70,7 +70,7 @@ export default function ContributePage() {
               Contribute your real rate. Get full Pro access while you contribute.
             </h1>
             <p style={styles.lead}>
-              Axia's data is only as good as the rates real freelancers send us.
+              Ratebench's data is only as good as the rates real freelancers send us.
               The contribution tool launches with the beta — drop your email below
               and we'll invite contributors first.
             </p>
@@ -83,7 +83,7 @@ export default function ContributePage() {
                 See your rate vs. peers in your skill + city + tier
               </li>
               <li style={styles.benefitItem}>
-                Early access to the quarterly Radar
+                Early access to the quarterly Bench
               </li>
               <li style={styles.benefitItem}>
                 Help shape the categories and methodology
@@ -130,7 +130,7 @@ export default function ContributePage() {
       <footer style={styles.footer} className="axia-footer">
         <div style={styles.footerInner}>
           <div style={styles.footerWordmark} className="axia-footer-wordmark">
-            Axia<span style={styles.wordmarkDot}>.</span>
+            Ratebench<span style={styles.wordmarkDot}>.</span>
           </div>
           <div style={styles.footerColophon} className="axia-footer-colophon">
             Freelance rate intelligence · Issue 001 · 2026

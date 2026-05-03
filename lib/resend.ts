@@ -15,7 +15,7 @@ export function getResend(): Resend {
 }
 
 export function getFromAddress(): string {
-  const raw = (process.env.RESEND_FROM_EMAIL ?? "Axia <hello@axiaradar.com>").trim();
+  const raw = (process.env.RESEND_FROM_EMAIL ?? "Ratebench <hello@ratebench.app>").trim();
   const sanitized = raw.replace(/^['"]|['"]$/g, "").trim();
 
   const displayMatch = sanitized.match(/^(.+?)\s*<([^>]+)>$/);
@@ -27,7 +27,7 @@ export function getFromAddress(): string {
     return sanitized;
   }
 
-  return "Axia <hello@axiaradar.com>";
+  return "Ratebench <hello@ratebench.app>";
 }
 
 /**
@@ -35,19 +35,19 @@ export function getFromAddress(): string {
  * Plain HTML, inline styles only — most email clients strip <style> blocks.
  */
 export function welcomeEmail(): { subject: string; html: string; text: string } {
-  const subject = "You're on the Axia waitlist";
+  const subject = "You're on the Ratebench waitlist";
 
   const text = [
-    "Welcome to Axia.",
+    "Welcome to Ratebench.",
     "",
-    "You're on the list for what clients actually pay independent designers,",
+    "You're on the list for the real market rate for independent designers,",
     "developers, photographers, and writers — by city, by skill, by experience level.",
     "",
-    "We'll email you when the first quarterly Radar issue is ready, and again",
+    "We'll email you when the first quarterly Bench issue is ready, and again",
     "when you're invited to the beta.",
     "",
-    "— Axia",
-    "https://axiaradar.com",
+    "— Ratebench",
+    "https://ratebench.app",
   ].join("\n");
 
   const html = `
@@ -61,7 +61,7 @@ export function welcomeEmail(): { subject: string; html: string; text: string } 
             <tr>
               <td style="padding:40px 40px 24px 40px;">
                 <div style="font-family:Georgia,'Times New Roman',serif;font-size:28px;font-weight:700;letter-spacing:-0.01em;color:#1f1a16;">
-                  Axia<span style="color:#c26a47;">.</span>
+                  Ratebench<span style="color:#c26a47;">.</span>
                 </div>
                 <div style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#c26a47;margin-top:6px;">
                   Freelance rate intelligence
@@ -74,15 +74,17 @@ export function welcomeEmail(): { subject: string; html: string; text: string } 
                   You're on the list.
                 </h1>
                 <p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:#3a322b;">
-                  Thanks for signing up. Axia is real market data on what clients pay
-                  independent designers, developers, photographers, and writers — by
-                  city, by skill, by experience level.
+                  Thanks for joining the Ratebench waitlist. Ratebench is freelance rate intelligence — the real market rate for
+                  independent designers, developers, photographers, and writers, by
+                  city, by skill, by experience level. Not a calculator. Not an
+                  average. Real percentile data so you stop guessing and stop leaving
+                  money behind.
                 </p>
                 <p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:#3a322b;">
                   Two things will happen from here:
                 </p>
                 <ul style="margin:0 0 16px 20px;padding:0;font-size:15px;line-height:1.6;color:#3a322b;">
-                  <li style="margin-bottom:8px;">You'll get the first quarterly <strong>Radar</strong> issue when it ships.</li>
+                  <li style="margin-bottom:8px;">You'll get the first quarterly <strong>Bench</strong> issue when it ships.</li>
                   <li>You'll get an invite when the beta opens, in roughly the order you signed up.</li>
                 </ul>
                 <p style="margin:0 0 24px 0;font-size:15px;line-height:1.6;color:#3a322b;">
@@ -93,7 +95,7 @@ export function welcomeEmail(): { subject: string; html: string; text: string } 
             <tr>
               <td style="padding:24px 40px 32px 40px;border-top:1px solid #e8e0d3;">
                 <p style="margin:0;font-family:'Courier New',monospace;font-size:11px;letter-spacing:0.06em;color:#8a7f72;">
-                  Axia &middot; <a href="https://axiaradar.com" style="color:#c26a47;text-decoration:none;">axiaradar.com</a>
+                  — The Ratebench team &middot; <a href="https://ratebench.app" style="color:#c26a47;text-decoration:none;">ratebench.app</a>
                 </p>
               </td>
             </tr>
