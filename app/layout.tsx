@@ -126,20 +126,6 @@ gtag('config', 'G-4YVEDRYTMH');`}
                   "temporalCoverage": "2024/.."
                 },
                 {
-                  "@type": "Product",
-                  "@id": "https://ratebench.app/#product",
-                  "name": "Ratebench Pro",
-                  "description": "Full distribution access to freelance rate benchmarks. Unlimited queries, quarterly trend alerts, PDF reports, historical trends.",
-                  "brand": { "@id": "https://ratebench.app/#organization" },
-                  "offers": {
-                    "@type": "AggregateOffer",
-                    "priceCurrency": "USD",
-                    "lowPrice": "0",
-                    "highPrice": "9",
-                    "offerCount": "3"
-                  }
-                },
-                {
                   "@type": "FAQPage",
                   "@id": "https://ratebench.app/#faq",
                   "mainEntity": [
